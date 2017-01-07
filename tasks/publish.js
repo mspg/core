@@ -5,6 +5,10 @@ const log = require('../log')
 
 const publish =
   () => {
+    if (!conf.TASKS.PUBLISH) {
+      return
+    }
+
     const { GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
 
     const outDirArray = OUT_DIR.split('/')
@@ -15,27 +19,34 @@ const publish =
     const cmdArgv = `${ cmdPrefix } ${ cmdOnto }`
     const cmd = `git subtree split ${ cmdArgv }`
 
-    log('exec', cmd)
-    exec(cmd, (err, id, stderr) => {
-      if (err) {
-        log.error(err)
-        return
-      }
-
-      log.success('git subtree split succeeded:', id.trim())
-
-      let cmd2 = `git push ${ GIT_ORIGIN } ${ id.trim() }:${ GIT_BRANCH }`
-
-      log('exec', cmd2)
-      exec(cmd2, (err, res) => {
+    return new Promise((resolve, reject) => {
+      log('exec', cmd)
+      exec(cmd, (err, id, stderr) => {
         if (err) {
-          log.error(err)
+          reject(err)
           return
         }
 
-        log.success('publish successfully finished', res)
+        log.success('git subtree split succeeded:', id.trim())
+        resolve()
       })
     })
+    .then(
+      () =>
+        new Promise((resolve, reject) => {
+          let cmd2 = `git push ${ GIT_ORIGIN } ${ id.trim() }:${ GIT_BRANCH }`
+
+          log('exec', cmd2)
+          exec(cmd2, (err, res) => {
+            if (err) {
+              log.error(err)
+              return
+            }
+
+            log.success('publish finished', res)
+          })
+        })
+    )
   }
 
 module.exports = publish

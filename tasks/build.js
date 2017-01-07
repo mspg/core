@@ -187,8 +187,12 @@ const serve =
   }
 
 const build =
-  () =>
-    new Promise((resolve, reject) => {
+  () => {
+    if (!conf.TASKS.BUILD) {
+      return
+    }
+
+    return new Promise((resolve, reject) => {
       // actually run the app:
       console.log('start watching')
       watcher(resolve, reject)
@@ -197,5 +201,6 @@ const build =
         serve(conf)
       }
     })
+  }
 
 module.exports = build

@@ -14,8 +14,6 @@ const lintHtml =
         return
       }
 
-      console.log('lint html')
-
       const executable = path.join('node_modules', '.bin', 'pug-lint')
       const config = path.join(conf.BUILD_DIR, 'pug-lintrc.js')
       const filesToLint = [
@@ -45,25 +43,21 @@ const lintCss =
         return
       }
 
-      log('lint css')
-
       const executable = path.join('node_modules', '.bin', 'stylint')
 
-      const configPath = path.join(conf.BUILD_DIR, '.stylintrc')
+      const configPath = path.join(__dirname, 'config', '.stylintrc')
       const filesToLint = [
         path.join(conf.BUNDLE_DIR, '*.css'),
         path.join(conf.INCLUDES_DIR, 'css'),
       ]
 
+      let timesReturned = 0
+
       filesToLint.forEach(
         dir => {
-          if (!fs.existsSync(dir)) {
-            return
-          }
-
           const cmd = `${ executable } --config ${ configPath } ${ dir }`
 
-          console.log('exec :', cmd)
+          // console.log('exec :', cmd)
 
           const exe = exec(cmd,
             (err, stdout) => {
@@ -72,7 +66,12 @@ const lintCss =
                 return
               }
               log('stylint results:', stdout)
-              resolve()
+
+              timesReturned += 1
+              if (timesReturned >= filesToLint.length) {
+                log('stylint finished')
+                resolve()
+              }
             }
           )
         }
