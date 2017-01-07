@@ -28,11 +28,11 @@ const publish =
         }
 
         log.success('git subtree split succeeded:', id.trim())
-        resolve()
+        resolve(id)
       })
     })
     .then(
-      () =>
+      (id) =>
         new Promise((resolve, reject) => {
           let cmd2 = `git push ${ GIT_ORIGIN } ${ id.trim() }:${ GIT_BRANCH }`
 

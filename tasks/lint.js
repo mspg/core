@@ -79,15 +79,18 @@ const lintCss =
     })
 
 const lint =
-  () => {
-    if (!conf.LINT.HTML && !conf.LINT.CSS) {
-      return
-    }
+  () =>
+    new Promise((resolve, reject) => {
+      if (!conf.LINT.HTML && !conf.LINT.CSS) {
+        resolve()
+        return
+      }
 
-    return lintHtml()
-      .then(lintCss)
-      .then(() => log('Linting completed'))
-      .catch(log.error)
-  }
+      return lintHtml()
+        .then(lintCss)
+        .then(() => log('Linting completed'))
+        .then(resolve)
+        .catch(reject)
+    })
 
 module.exports = lint
