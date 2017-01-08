@@ -1,5 +1,5 @@
 module.exports = {
-  CSS: require('./css'),
-  HTML: require('./html'),
-  JS: require('./js'),
+  STYLUS: require('./stylus'),
+  PUG: require('./pug'),
+  BABEL: require('./babel'),
 }

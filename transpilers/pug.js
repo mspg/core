@@ -24,7 +24,7 @@ pug.filters.stylus =
     return ret
   }
 
-const TRANSPILE_HTML =
+const PUG =
   ({ buffer, resolve, reject }) => {
     const config = Object.assign(
       { basedir: conf.HTML_DIR },
@@ -46,4 +46,4 @@ const TRANSPILE_HTML =
     })
   }
 
-module.exports = TRANSPILE_HTML
+module.exports = PUG

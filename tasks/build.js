@@ -42,7 +42,7 @@ const transpileFile =
       const typeArray = name.split('.')
       const type = typeArray[typeArray.length - 1]
 
-      const transpiler = conf.transpilers[type.toUpperCase()]
+      const transpiler = conf.TRANSPILERS[type.toUpperCase()]
       if (typeof transpiler === 'function') {
         new Promise((res, rej) => {
           const bundler = Object.assign(
