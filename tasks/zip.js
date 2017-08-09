@@ -50,7 +50,7 @@ const fileEndsWith = file => suffix =>
 // compress a single file
 const zipFile = file => {
   // do not run for files we can compress with imagemin
-  if (['.gz'].some(fileEndsWith(file))) {
+  if (['.gz', 'CNAME'].some(fileEndsWith(file))) {
     return
   }
 
