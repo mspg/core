@@ -1,5 +1,6 @@
 const fs = require('fs-extra')
 const chokidar = require('chokidar')
+const { isFunction } = require('magic-types')
 
 const serve = require('./serve')
 
@@ -43,7 +44,7 @@ const transpileFile =
       const type = typeArray[typeArray.length - 1]
 
       const transpiler = conf.TRANSPILERS[type.toUpperCase()]
-      if (typeof transpiler === 'function') {
+      if (isFunction(transpiler)) {
         new Promise((res, rej) => {
           const bundler = Object.assign(
             {},
