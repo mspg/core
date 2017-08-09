@@ -194,7 +194,6 @@ const build =
 
     return new Promise((resolve, reject) => {
       // actually run the app:
-      console.log('start watching')
       watcher(resolve, reject)
 
       if (conf.SERVE) {
