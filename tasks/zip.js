@@ -14,7 +14,7 @@ const walk = (dir, done) => {
 
     let pending = list.length
 
-    if (!pending) {
+    if (pending === 0) {
       return done(null, results)
     }
 
@@ -55,6 +55,7 @@ const zipFile = file => {
   }
 
   return new Promise((resolve, reject) => {
+    const gzFileName = `${file}.gz`
     const options = {
       verbose: false,
       verbose_more: false,
@@ -64,7 +65,7 @@ const zipFile = file => {
       blocksplittingmax: 15,
     }
     const zopferl = zopfli.createGzip(options)
-    const writeStream = fs.createWriteStream(`${file}.gz`)
+    const writeStream = fs.createWriteStream(gzFileName)
 
     const readStream = fs.createReadStream(file)
       .pipe(zopferl)
@@ -72,7 +73,14 @@ const zipFile = file => {
 
     readStream.on('error', reject)
     writeStream.on('error', reject)
-    writeStream.on('close', resolve)
+    writeStream.on('close', () => {
+      const [gzSize, origSize] = [gzFileName, file].map(f => fs.statSync(f).size)
+      if (gzSize > origSize) {
+        // gzip is bigger than original, delete gzipped file
+        log.warn(file, 'gzipped files is bigger than original. deleting .gz')
+        fs.unlinkSync(gzFileName)
+      }
+    })
   })
 }
 
