@@ -80,30 +80,34 @@ const zipFile = file => {
         log.warn(file, 'gzipped files is bigger than original. deleting .gz')
         fs.unlinkSync(gzFileName)
       }
+      resolve()
     })
   })
 }
 
-const compressFiles = () =>
-  new Promise((resolve, reject) => {
-    if (!conf.TASKS.ZIP) {
-      resolve()
-      return
-    }
-
-    walk(conf.OUT_DIR, (err, files) => {
-      const promises = files.map(zipFile)
-      Promise.all(promises)
-             .then(resolve)
-             .catch(reject)
-    })
-  })
-
 // main task, compresses all files in the public dir
 const zip =
   () =>
-    compressFiles()
-      .then(() => console.log('zip done'))
-      .catch(err => console.error(err))
+    new Promise((resolve, reject) => {
+      if (!conf.TASKS.ZIP) {
+        resolve()
+        return
+      }
+
+      walk(conf.OUT_DIR, (err, files) => {
+        if (err) {
+          log.error(err)
+          return
+        }
+
+        const promises = files.map(zipFile)
+        Promise.all(promises)
+               .then(() => {
+                 console.log('zipping finished')
+                 resolve()
+               })
+               .catch(reject)
+      })
+    })
 
 module.exports = zip
