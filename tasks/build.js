@@ -1,7 +1,7 @@
 const fs = require('fs-extra')
 const chokidar = require('chokidar')
-const browserSync = require('browser-sync')
-const path = require('path')
+
+const serve = require('./serve')
 
 const log = require('../log')
 const conf = require('../config')()
@@ -168,23 +168,6 @@ const watcher =
       })
   }
 
-const serve =
-  () => {
-    const bsConfig = {
-      server: {
-        baseDir: conf.OUT_DIR,
-        files: conf.OUT_DIR,
-        // directory: true,
-        index: 'index.html',
-      },
-      open: false,
-    }
-
-    browserSync(bsConfig, (err, bs) => {
-      const url = bs.options.getIn(["urls", "local"])
-      log.success('server listening to http://', url)
-    })
-  }
 
 const build =
   () => {
