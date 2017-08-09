@@ -45,8 +45,6 @@ const BABEL =
       resolve(result.code)
       return
     }
-
-
   }
 
 module.exports = BABEL
