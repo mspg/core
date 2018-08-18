@@ -1,5 +1,5 @@
 {
-  "name": "magic-build",
+  "name": "@magic/stasis",
   "version": "0.0.1",
   "description": "static site generator",
   "main": "./index.js",
