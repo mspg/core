@@ -34,7 +34,7 @@
     "@magic/test": "github:magic/test"
   },
   "scripts": {
-    "test": "t",
+    "test": "t -p",
     "coverage": "t -c",
     "format": "f",
     "format:fix": "f -w"
