@@ -20,8 +20,8 @@ const BABEL =
         filename: name,
         sourceMap: 'both',
         presets: [
-          'babili',
-          'es2015',
+          'minify',
+          'env',
           'stage-0',
           [ 'env', {
             targets: {
