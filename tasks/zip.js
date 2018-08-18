@@ -1,4 +1,4 @@
-const zopfli = require('node-zopfli')
+const zopfli = require('node-zopfli-es')
 const fs = require('fs')
 const path = require('path')
 
