@@ -1,6 +1,6 @@
 const fs = require('fs-extra')
 const chokidar = require('chokidar')
-const { isFunction } = require('magic-types')
+const { isFunction } = require('@magic/types')
 
 const serve = require('./serve')
 
