@@ -29,21 +29,23 @@ const publish = () => {
       log.success('git subtree split succeeded:', id.trim())
       resolve(id)
     })
-  })
-    .then((id) => new Promise((resolve, reject) => {
-      let cmd2 = `git push ${GIT_ORIGIN} ${id.trim()}:${GIT_BRANCH}`
+  }).then(
+    id =>
+      new Promise((resolve, reject) => {
+        let cmd2 = `git push ${GIT_ORIGIN} ${id.trim()}:${GIT_BRANCH}`
 
-      log('exec', cmd2)
-      exec(cmd2, (err, res) => {
-        if (err) {
-          reject(err)
-          return
-        }
+        log('exec', cmd2)
+        exec(cmd2, (err, res) => {
+          if (err) {
+            reject(err)
+            return
+          }
 
-        log.success('publish finished', res)
-        resolve()
-      })
-    }))
+          log.success('publish finished', res)
+          resolve()
+        })
+      }),
+  )
 }
 
 module.exports = publish

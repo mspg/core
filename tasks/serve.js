@@ -10,10 +10,10 @@ const serve = () => {
       files: conf.OUT_DIR,
       index: 'index.html',
       serveStaticOptions: {
-        extensions: ['html']
-      }
+        extensions: ['html'],
+      },
     },
-    open: false
+    open: false,
   }
 
   browserSync(bsConfig, (err, bs) => {

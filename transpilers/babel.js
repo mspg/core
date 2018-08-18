@@ -6,32 +6,25 @@ const conf = require('../config')()
 // const log = require('../log')
 
 const BABEL = ({ buffer, name, resolve, reject }) => {
-  const config = Object.assign(
-    { basedir: conf.HTML_DIR },
-    conf
-  )
+  const config = Object.assign({ basedir: conf.HTML_DIR }, conf)
 
-  const babelOptions = Object.assign(
-    {},
-    config.BABEL,
-    {
-      filename: name,
-      sourceMap: 'both',
-      presets: [
-        'minify',
+  const babelOptions = Object.assign({}, config.BABEL, {
+    filename: name,
+    sourceMap: 'both',
+    presets: [
+      'minify',
+      'env',
+      'stage-0',
+      [
         'env',
-        'stage-0',
-        [ 'env', {
+        {
           targets: {
-            browsers: [
-              'last 2 versions',
-              'safari >= 7'
-            ]
-          }
-        }]
-      ]
-    }
-  )
+            browsers: ['last 2 versions', 'safari >= 7'],
+          },
+        },
+      ],
+    ],
+  })
 
   const result = babel.transform(buffer, babelOptions)
 

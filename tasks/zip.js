@@ -66,12 +66,13 @@ const zipFile = file => {
       numiterations: 15,
       blocksplitting: true,
       blocksplittinglast: false,
-      blocksplittingmax: 15
+      blocksplittingmax: 15,
     }
     const zopferl = zopfli.createGzip(options)
     const writeStream = fs.createWriteStream(gzFileName)
 
-    const readStream = fs.createReadStream(file)
+    const readStream = fs
+      .createReadStream(file)
       .pipe(zopferl)
       .pipe(writeStream)
 
@@ -90,27 +91,27 @@ const zipFile = file => {
 }
 
 // main task, compresses all files in the public dir
-const zip = () => new Promise((resolve, reject) => {
-  if (!conf.TASKS.ZIP) {
-    resolve()
-    return
-  }
-
-  walk(conf.OUT_DIR, (err, files) => {
-    if (err) {
-      log.error(err)
+const zip = () =>
+  new Promise((resolve, reject) => {
+    if (!conf.TASKS.ZIP) {
+      resolve()
       return
     }
 
-    const promises = files.map(zipFile)
-    Promise
-      .all(promises)
-      .then(() => {
-        console.log('zipping finished')
-        resolve()
-      })
-      .catch(reject)
+    walk(conf.OUT_DIR, (err, files) => {
+      if (err) {
+        log.error(err)
+        return
+      }
+
+      const promises = files.map(zipFile)
+      Promise.all(promises)
+        .then(() => {
+          console.log('zipping finished')
+          resolve()
+        })
+        .catch(reject)
+    })
   })
-})
 
 module.exports = zip

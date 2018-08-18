@@ -1,5 +1,5 @@
 module.exports = {
   STYLUS: require('./stylus'),
   PUG: require('./pug'),
-  BABEL: require('./babel')
+  BABEL: require('./babel'),
 }

@@ -20,26 +20,23 @@ const style = string =>
 
 const TRANSPILE_CSS = ({ buffer, name, resolve, reject }) => {
   const string = buffer.toString()
-  style(string)
-    .render((err, css) => {
-      if (err) {
-        reject(err)
-      }
+  style(string).render((err, css) => {
+    if (err) {
+      reject(err)
+    }
 
-      if (conf.ENV !== 'production') {
-        resolve(css)
-        return
-      }
+    if (conf.ENV !== 'production') {
+      resolve(css)
+      return
+    }
 
-      cssnano
-        .process(css)
-        .then(
-          result => {
-            resolve(result.css)
-          }
-        )
-        .catch(console.error)
-    })
+    cssnano
+      .process(css)
+      .then(result => {
+        resolve(result.css)
+      })
+      .catch(console.error)
+  })
 }
 
 module.exports = TRANSPILE_CSS

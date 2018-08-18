@@ -7,7 +7,7 @@ const serve = require('./serve')
 const log = require('../log')
 const conf = require('../config')()
 
-const mkdirSync = (path) => {
+const mkdirSync = path => {
   try {
     fs.mkdirSync(path)
   } catch (e) {
@@ -30,8 +30,7 @@ const getFileContent = file =>
       const out = name.replace(conf.BUNDLE_DIR, conf.OUT_DIR)
       resolve({ name, buffer, out })
     })
-  })
-    .catch(log.error)
+  }).catch(log.error)
 
 const transpileFile = file =>
   new Promise((resolve, reject) => {
@@ -42,11 +41,7 @@ const transpileFile = file =>
     const transpiler = conf.TRANSPILERS[type.toUpperCase()]
     if (isFunction(transpiler)) {
       new Promise((resolve, reject) => {
-        const bundler = Object.assign(
-          {},
-          file,
-          { resolve, reject, buffer }
-        )
+        const bundler = Object.assign({}, file, { resolve, reject, buffer })
         transpiler(bundler)
       })
         .then(bundle => resolve(Object.assign({}, file, { bundle })))
@@ -56,13 +51,8 @@ const transpileFile = file =>
     }
 
     // transpiler does not exist, just return stringified buffer as bundle
-    resolve(Object.assign(
-      {},
-      file,
-      { bundle: buffer }
-    ))
-  })
-    .catch(log.error)
+    resolve(Object.assign({}, file, { bundle: buffer }))
+  }).catch(log.error)
 
 const fileCache = {}
 
@@ -80,10 +70,13 @@ const writeFile = file => {
   // write file to disk
   return new Promise((resolve, reject) => {
     // create directory for file if it does not exist
-    const outDir = out.split('/').slice(0, -1).join('/')
+    const outDir = out
+      .split('/')
+      .slice(0, -1)
+      .join('/')
     mkdirSync(outDir)
 
-    fs.writeFile(out, bundle, (err) => {
+    fs.writeFile(out, bundle, err => {
       if (err) {
         reject(err)
         return
@@ -93,8 +86,7 @@ const writeFile = file => {
 
       resolve(file)
     })
-  })
-  .catch(log.error)
+  }).catch(log.error)
 }
 
 const prepareData = args => new Promise(resolve => resolve(args))
@@ -134,22 +126,12 @@ const watcher = (resolve, reject) => {
 
   let initDone = false
 
-  const devWatcher = chokidar.watch(
-    conf.SRC_DIR,
-    {
-      ignored: [
-        '**/node_modules/**',
-        '**/public/**',
-        '**/public',
-        '**/.git/**'
-      ]
-    }
-  )
+  const devWatcher = chokidar.watch(conf.SRC_DIR, {
+    ignored: ['**/node_modules/**', '**/public/**', '**/public', '**/.git/**'],
+  })
 
   devWatcher
-    .on('all', (event, name) =>
-      handleWatchUpdate({ event, name, devWatcher, initDone, conf })
-    )
+    .on('all', (event, name) => handleWatchUpdate({ event, name, devWatcher, initDone, conf }))
     .on('ready', () => {
       initDone = true
 
