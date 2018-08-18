@@ -1,24 +1,19 @@
-// const ENV = process.env.NODE_ENV || 'development'
+const { exec } = require('child_process');
+const log = (...msgs) => console.log(...msgs)
 
-const log =
-  (...msgs) => {
-    // if (ENV === 'development') {
-    console.log(...msgs)
-    // }
-  }
+// note the double string declarations!
+const red = '`tput setaf 1`'
+const green = '`tput setaf 2`'
+const yellow = '`tput setaf 3`'
 
-log.success =
-  (...msgs) => {
-    console.log('\x1b[32m', ...msgs, '\x1b[0m')
-  }
+const print = (e, stdout) => console.log(stdout)
 
-log.warn =
-  (...msgs) =>
-    console.warn('\x1b[33m', ...msgs, '\x1b[0m')
+const stringify = (...msgs) => msgs.length === 1 ? msgs[0] : JSON.stringify(msgs)
 
-log.error =
-  (...msgs) => {
-    console.error('\033[31m', ...msgs, '\x1b[0m')
-  }
+log.success = (...msgs) => exec(`echo ${green} "${stringify(msgs)}"`, print)
+
+log.warn = (...msgs) => exec(`echo ${yellow} "${stringify(msgs)}"`, print)
+
+log.error = (...msgs) => exec(`echo ${red} "${stringify(msgs)}"`, print)
 
 module.exports = log
