@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const conf = require('./config')()
 const log = require('./log')
 
 const tasks = require('./tasks')

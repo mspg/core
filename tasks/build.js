@@ -10,8 +10,7 @@ const conf = require('../config')()
 const mkdirSync = (path) => {
   try {
     fs.mkdirSync(path)
-  }
-  catch(e) {
+  } catch (e) {
     if (e.code !== 'EEXIST') {
       throw e
     }
@@ -32,26 +31,26 @@ const getFileContent = file =>
       resolve({ name, buffer, out })
     })
   })
-  .catch(log.error)
+    .catch(log.error)
 
 const transpileFile = file =>
   new Promise((resolve, reject) => {
-    const { name, buffer, out } = file
+    const { name, buffer } = file
     const typeArray = name.split('.')
     const type = typeArray[typeArray.length - 1]
 
     const transpiler = conf.TRANSPILERS[type.toUpperCase()]
     if (isFunction(transpiler)) {
-      new Promise((res, rej) => {
+      new Promise((resolve, reject) => {
         const bundler = Object.assign(
           {},
           file,
-          { resolve: res, reject: rej, buffer }
+          { resolve, reject, buffer }
         )
         transpiler(bundler)
       })
-      .then(bundle => resolve(Object.assign({}, file, { bundle })))
-      .catch(reject)
+        .then(bundle => resolve(Object.assign({}, file, { bundle })))
+        .catch(reject)
 
       return
     }
@@ -63,12 +62,12 @@ const transpileFile = file =>
       { bundle: buffer }
     ))
   })
-  .catch(log.error)
+    .catch(log.error)
 
 const fileCache = {}
 
 const writeFile = file => {
-  const { name, buffer, bundle, out } = file
+  const { buffer, bundle, out } = file
 
   // no changes, resolve
   if (fileCache[out] && fileCache[out].content === buffer.toString()) {
@@ -98,7 +97,7 @@ const writeFile = file => {
   .catch(log.error)
 }
 
-const prepareData = args => new Promise(res => res(args))
+const prepareData = args => new Promise(resolve => resolve(args))
 
 const handleWatchUpdate = ({ event, name, initDone, devWatcher }) => {
   if (name.indexOf(conf.BUNDLE_DIR) < 0) {
@@ -142,8 +141,8 @@ const watcher = (resolve, reject) => {
         '**/node_modules/**',
         '**/public/**',
         '**/public',
-        '**/.git/**',
-      ],
+        '**/.git/**'
+      ]
     }
   )
 
@@ -160,7 +159,6 @@ const watcher = (resolve, reject) => {
       }
     })
 }
-
 
 const build = () => {
   if (!conf.TASKS.BUILD) {

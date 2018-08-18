@@ -15,7 +15,7 @@ module.exports = {
   disallowSpaceAfterCodeOperator: null,
   disallowSpacesInsideAttributeBrackets: true,
   disallowSpecificAttributes: [
-    { a: 'name' },
+    { a: 'name' }
   ],
   disallowSpecificTags: null,
   disallowStringConcatenation: true,
@@ -34,18 +34,18 @@ module.exports = {
     { form: 'action' },
     // { img: 'alt || role' }, // not working (yet?)
     { input: 'type' },
-    { 'input[type=submit]': 'value' },
+    { 'input[type=submit]': 'value' }
   ],
   requireStrictEqualityOperators: true,
   validateAttributeQuoteMarks: '\'',
   validateAttributeSeparator:
   {
     separator: ' ',
-    multiLineSeparator: '\n  ',
+    multiLineSeparator: '\n  '
   },
   validateDivTags: true,
   validateExtensions: true,
   validateIndentation: 2,
   validateLineBreaks: 'LF',
-  validateSelfClosingTags: true,
+  validateSelfClosingTags: true
 }

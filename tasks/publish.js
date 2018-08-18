@@ -11,12 +11,12 @@ const publish = () => {
   const { GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
 
   const outDirArray = OUT_DIR.split('/')
-  const outDir = outDirArray[outDirArray.length -1]
+  const outDir = outDirArray[outDirArray.length - 1]
 
-  const cmdPrefix = `--prefix=${ outDir }`
-  const cmdOnto = `--onto=${ GIT_ORIGIN }/${ GIT_BRANCH }`
-  const cmdArgv = `${ cmdPrefix } ${ cmdOnto }`
-  const cmd = `git subtree split ${ cmdArgv }`
+  const cmdPrefix = `--prefix=${outDir}`
+  const cmdOnto = `--onto=${GIT_ORIGIN}/${GIT_BRANCH}`
+  const cmdArgv = `${cmdPrefix} ${cmdOnto}`
+  const cmd = `git subtree split ${cmdArgv}`
 
   return new Promise((resolve, reject) => {
     log('exec', cmd)
@@ -30,20 +30,20 @@ const publish = () => {
       resolve(id)
     })
   })
-  .then((id) => new Promise((resolve, reject) => {
-    let cmd2 = `git push ${ GIT_ORIGIN } ${ id.trim() }:${ GIT_BRANCH }`
+    .then((id) => new Promise((resolve, reject) => {
+      let cmd2 = `git push ${GIT_ORIGIN} ${id.trim()}:${GIT_BRANCH}`
 
-    log('exec', cmd2)
-    exec(cmd2, (err, res) => {
-      if (err) {
-        reject(err)
-        return
-      }
+      log('exec', cmd2)
+      exec(cmd2, (err, res) => {
+        if (err) {
+          reject(err)
+          return
+        }
 
-      log.success('publish finished', res)
-      resolve()
-    })
-  }))
+        log.success('publish finished', res)
+        resolve()
+      })
+    }))
 }
 
 module.exports = publish

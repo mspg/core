@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const log = require('./log')
 
 const { argv } = process
 
@@ -23,14 +22,14 @@ defaultConfig.GIT_BRANCH = 'gh-pages'
 
 defaultConfig.LINT = {
   HTML: argv.indexOf('html') > -1,
-  CSS: argv.indexOf('css') > -1,
+  CSS: argv.indexOf('css') > -1
 }
 
 defaultConfig.TASKS = {
   BUILD: argv.indexOf('build') > -1,
   LINT: argv.indexOf('lint') > -1,
   PUBLISH: argv.indexOf('publish') > -1,
-  ZIP: argv.indexOf('zip') > -1,
+  ZIP: argv.indexOf('zip') > -1
 }
 
 const configPath = path.join(defaultConfig.CWD, 'config.js')
@@ -39,9 +38,9 @@ const config =
   () =>
     fs.existsSync(configPath)
       ? Object.assign(
-          defaultConfig,
-          require(configPath)
-        )
+        defaultConfig,
+        require(configPath)
+      )
       : defaultConfig
 
 module.exports = config

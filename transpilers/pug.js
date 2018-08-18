@@ -1,9 +1,10 @@
 // html builders
 const pug = require('pug')
 const htmlMinify = require('html-minifier').minify
+const style = require('stylus')
 
 const conf = require('../config')()
-const log = require('../log')
+// const log = require('../log')
 
 // add pug stylus filter
 pug.filters.stylus = (str, options) => {
@@ -35,7 +36,7 @@ const PUG = ({ buffer, resolve, reject }) => {
       reject(err)
     }
 
-    if (conf.ENV !== 'production') {
+    if (config.ENV !== 'production') {
       resolve(html)
       return
     }
