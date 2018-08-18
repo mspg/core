@@ -2,13 +2,13 @@
   "name": "@magic/stasis",
   "version": "0.0.1",
   "description": "static site generator",
-  "main": "./index.js",
+  "main": "./src/index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com/magic/build"
   },
   "bin": {
-    "magic-build": "./bin.js"
+    "magic-stasis": "./bin.js"
   },
   "author": "Jascha Ehrenreich <dev@jaeh.at>",
   "license": "AGPL-3.0",
