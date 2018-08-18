@@ -4,9 +4,24 @@ const log = require('./src/log')
 
 const tasks = require('./src/tasks')
 
-tasks
-  .lint()
-  .then(tasks.build)
-  .then(tasks.zip)
-  .then(tasks.publish)
-  .catch(log.error)
+const build = async () => {
+  try {
+    await tasks.build()
+
+    await tasks.lint()
+
+    await tasks.zip()
+    
+    await tasks.publish()
+
+    log.success('build done')
+  }
+  catch(e) {
+    throw e
+  }
+
+}
+
+build()
+
+module.exports = build
