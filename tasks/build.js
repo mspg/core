@@ -7,183 +7,174 @@ const serve = require('./serve')
 const log = require('../log')
 const conf = require('../config')()
 
-const mkdirSync =
-  (path) => {
-    try {
-      fs.mkdirSync(path)
-    }
-    catch(e) {
-      if (e.code !== 'EEXIST') {
-        throw e
-      }
+const mkdirSync = (path) => {
+  try {
+    fs.mkdirSync(path)
+  }
+  catch(e) {
+    if (e.code !== 'EEXIST') {
+      throw e
     }
   }
+}
 
-const getFileContent =
-  file =>
-    new Promise((resolve, reject) => {
-      const { name } = file
+const getFileContent = file =>
+  new Promise((resolve, reject) => {
+    const { name } = file
 
-      fs.readFile(name, (err, buffer) => {
-        if (err) {
-          reject(err)
-          return
-        }
-
-        const out = name.replace(conf.BUNDLE_DIR, conf.OUT_DIR)
-        resolve({ name, buffer, out })
-      })
-    })
-    .catch(log.error)
-
-const transpileFile =
-  file =>
-    new Promise((resolve, reject) => {
-      const { name, buffer, out } = file
-      const typeArray = name.split('.')
-      const type = typeArray[typeArray.length - 1]
-
-      const transpiler = conf.TRANSPILERS[type.toUpperCase()]
-      if (isFunction(transpiler)) {
-        new Promise((res, rej) => {
-          const bundler = Object.assign(
-            {},
-            file,
-            { resolve: res, reject: rej, buffer }
-          )
-          transpiler(bundler)
-        })
-        .then(bundle => resolve(Object.assign({}, file, { bundle })))
-        .catch(reject)
-
+    fs.readFile(name, (err, buffer) => {
+      if (err) {
+        reject(err)
         return
       }
 
-      // transpiler does not exist, just return stringified buffer as bundle
-      resolve(Object.assign(
-        {},
-        file,
-        { bundle: buffer }
-      ))
+      const out = name.replace(conf.BUNDLE_DIR, conf.OUT_DIR)
+      resolve({ name, buffer, out })
     })
-    .catch(log.error)
+  })
+  .catch(log.error)
+
+const transpileFile = file =>
+  new Promise((resolve, reject) => {
+    const { name, buffer, out } = file
+    const typeArray = name.split('.')
+    const type = typeArray[typeArray.length - 1]
+
+    const transpiler = conf.TRANSPILERS[type.toUpperCase()]
+    if (isFunction(transpiler)) {
+      new Promise((res, rej) => {
+        const bundler = Object.assign(
+          {},
+          file,
+          { resolve: res, reject: rej, buffer }
+        )
+        transpiler(bundler)
+      })
+      .then(bundle => resolve(Object.assign({}, file, { bundle })))
+      .catch(reject)
+
+      return
+    }
+
+    // transpiler does not exist, just return stringified buffer as bundle
+    resolve(Object.assign(
+      {},
+      file,
+      { bundle: buffer }
+    ))
+  })
+  .catch(log.error)
 
 const fileCache = {}
 
-const writeFile =
-  file => {
-    const { name, buffer, bundle, out } = file
+const writeFile = file => {
+  const { name, buffer, bundle, out } = file
 
-    // no changes, resolve
-    if (fileCache[out] && fileCache[out].content === buffer.toString()) {
-      return file
-    }
+  // no changes, resolve
+  if (fileCache[out] && fileCache[out].content === buffer.toString()) {
+    return file
+  }
 
-    // write file to "cache"
-    fileCache[out] = file
+  // write file to "cache"
+  fileCache[out] = file
 
-    // write file to disk
-    return new Promise((resolve, reject) => {
-      // create directory for file if it does not exist
-      const outDir = out.split('/').slice(0, -1).join('/')
-      mkdirSync(outDir)
+  // write file to disk
+  return new Promise((resolve, reject) => {
+    // create directory for file if it does not exist
+    const outDir = out.split('/').slice(0, -1).join('/')
+    mkdirSync(outDir)
 
-      fs.writeFile(out, bundle, (err) => {
-        if (err) {
-          reject(err)
-          return
-        }
+    fs.writeFile(out, bundle, (err) => {
+      if (err) {
+        reject(err)
+        return
+      }
 
-        log.success('writeFile', out)
+      log.success('writeFile', out)
 
-        resolve(file)
-      })
+      resolve(file)
     })
-    .catch(log.error)
+  })
+  .catch(log.error)
+}
+
+const prepareData = args => new Promise(res => res(args))
+
+const handleWatchUpdate = ({ event, name, initDone, devWatcher }) => {
+  if (name.indexOf(conf.BUNDLE_DIR) < 0) {
+    if (initDone) {
+      log('stopping watcher', name)
+      devWatcher.close()
+      watcher()
+    }
+    return
   }
 
-const prepareData =
-  args =>
-    new Promise(res => res(args))
+  // gets called on first run of watch dir indexing
+  if (event === 'add' || event === 'change') {
+    prepareData({ name })
+      .then(getFileContent)
+      .then(transpileFile)
+      .then(writeFile)
+      .catch(log.error)
 
-const handleWatchUpdate =
-  ({ event, name, initDone, devWatcher }) => {
-    if (name.indexOf(conf.BUNDLE_DIR) < 0) {
-      if (initDone) {
-        log('stopping watcher', name)
-        devWatcher.close()
-        watcher()
-      }
-      return
-    }
-
-    // gets called on first run of watch dir indexing
-    if (event === 'add' || event === 'change') {
-      prepareData({ name })
-        .then(getFileContent)
-        .then(transpileFile)
-        .then(writeFile)
-        .catch(log.error)
-
-      return
-    }
-
-    if (event === 'addDir') {
-      mkdirSync(name)
-
-      return
-    }
-
-    log('Unhandled watch event:', { event, name })
+    return
   }
 
-const watcher =
-  (resolve, reject) => {
-    log('Watching', conf.SRC_DIR)
+  if (event === 'addDir') {
+    mkdirSync(name)
 
-    let initDone = false
+    return
+  }
 
-    const devWatcher = chokidar.watch(
-      conf.SRC_DIR,
-      {
-        ignored: [
-          '**/node_modules/**',
-          '**/public/**',
-          '**/public',
-          '**/.git/**',
-        ],
-      }
+  log('Unhandled watch event:', { event, name })
+}
+
+const watcher = (resolve, reject) => {
+  log('Watching', conf.SRC_DIR)
+
+  let initDone = false
+
+  const devWatcher = chokidar.watch(
+    conf.SRC_DIR,
+    {
+      ignored: [
+        '**/node_modules/**',
+        '**/public/**',
+        '**/public',
+        '**/.git/**',
+      ],
+    }
+  )
+
+  devWatcher
+    .on('all', (event, name) =>
+      handleWatchUpdate({ event, name, devWatcher, initDone, conf })
     )
+    .on('ready', () => {
+      initDone = true
 
-    devWatcher
-      .on('all', (event, name) =>
-        handleWatchUpdate({ event, name, devWatcher, initDone, conf })
-      )
-      .on('ready', () => {
-        initDone = true
-
-        if (!conf.WATCH && !conf.SERVE) {
-          devWatcher.close()
-          resolve()
-        }
-      })
-  }
-
-
-const build =
-  () => {
-    if (!conf.TASKS.BUILD) {
-      return
-    }
-
-    return new Promise((resolve, reject) => {
-      // actually run the app:
-      watcher(resolve, reject)
-
-      if (conf.SERVE) {
-        serve(conf)
+      if (!conf.WATCH && !conf.SERVE) {
+        devWatcher.close()
+        resolve()
       }
     })
+}
+
+
+const build = () => {
+  if (!conf.TASKS.BUILD) {
+    return
   }
+
+  return new Promise((resolve, reject) => {
+    // actually run the app:
+    watcher(resolve, reject)
+
+    if (conf.SERVE) {
+      serve(conf)
+    }
+  })
+}
 
 module.exports = build

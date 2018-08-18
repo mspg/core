@@ -3,24 +3,23 @@ const browserSync = require('browser-sync')
 const log = require('../log')
 const conf = require('../config')()
 
-const serve =
-  () => {
-    const bsConfig = {
-      server: {
-        baseDir: conf.OUT_DIR,
-        files: conf.OUT_DIR,
-        index: 'index.html',
-        serveStaticOptions: {
-          extensions: ['html'],
-        },
+const serve = () => {
+  const bsConfig = {
+    server: {
+      baseDir: conf.OUT_DIR,
+      files: conf.OUT_DIR,
+      index: 'index.html',
+      serveStaticOptions: {
+        extensions: ['html'],
       },
-      open: false,
-    }
-
-    browserSync(bsConfig, (err, bs) => {
-      const url = bs.options.getIn(["urls", "local"])
-      log.success('server listening to http://', url)
-    })
+    },
+    open: false,
   }
+
+  browserSync(bsConfig, (err, bs) => {
+    const url = bs.options.getIn(["urls", "local"])
+    log.success('server listening to http://', url)
+  })
+}
 
 module.exports = serve
