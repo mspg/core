@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const log = require('./log')
+const log = require('./src/log')
 
-const tasks = require('./tasks')
+const tasks = require('./src/tasks')
 
 tasks
   .lint()
