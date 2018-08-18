@@ -1,15 +1,19 @@
-const fs = require('fs-extra')
+const fso = require('fs')
+const util = require('util')
+
 const chokidar = require('chokidar')
-const { isFunction } = require('@magic/types')
+const is = require('@magic/types')
 
 const serve = require('./serve')
 
 const log = require('../log')
 const conf = require('../config')()
 
-const mkdirSync = path => {
+const mkd = util.promisify(fso.mkdir)
+
+const mkdir = async path => {
   try {
-    fs.mkdirSync(path)
+    await mkd(path)
   } catch (e) {
     if (e.code !== 'EEXIST') {
       throw e
@@ -17,46 +21,51 @@ const mkdirSync = path => {
   }
 }
 
-const getFileContent = file =>
-  new Promise((resolve, reject) => {
-    const { name } = file
+const fs = {
+  readFile: util.promisify(fso.readFile),
+  writeFile: util.promisify(fso.writeFile),
+  mkdir,
+}
 
-    fs.readFile(name, (err, buffer) => {
-      if (err) {
-        reject(err)
-        return
-      }
+const getFileContent = async file => {
+  const { name } = file
 
-      const out = name.replace(conf.BUNDLE_DIR, conf.OUT_DIR)
-      resolve({ name, buffer, out })
-    })
-  }).catch(log.error)
+  const buffer = await fs.readFile(name)
+  
+  const out = name.replace(conf.BUNDLE_DIR, conf.OUT_DIR)
 
-const transpileFile = file =>
-  new Promise((resolve, reject) => {
-    const { name, buffer } = file
-    const typeArray = name.split('.')
-    const type = typeArray[typeArray.length - 1]
+  return { 
+    name, 
+    buffer, 
+    out, 
+  }
+}
 
-    const transpiler = conf.TRANSPILERS[type.toUpperCase()]
-    if (isFunction(transpiler)) {
-      new Promise((resolve, reject) => {
-        const bundler = Object.assign({}, file, { resolve, reject, buffer })
-        transpiler(bundler)
-      })
-        .then(bundle => resolve(Object.assign({}, file, { bundle })))
-        .catch(reject)
+const transpileFile = async file => {
+  const { name, buffer } = file
+  const typeArray = name.split('.')
+  const type = typeArray[typeArray.length - 1]
 
-      return
+  const transpiler = conf.TRANSPILERS[type.toUpperCase()]
+  if (is.fn(transpiler)) {
+    const bundler = Object.assign({}, file, { buffer })
+ 
+    try {
+      return await transpiler(bundler)
+      return bundle
     }
+    catch (e) {
+      throw e
+    }
+  }
 
-    // transpiler does not exist, just return stringified buffer as bundle
-    resolve(Object.assign({}, file, { bundle: buffer }))
-  }).catch(log.error)
+  // transpiler does not exist, just return stringified buffer as bundle
+  return buffer
+}
 
 const fileCache = {}
 
-const writeFile = file => {
+const write = async file => {
   const { buffer, bundle, out } = file
 
   // no changes, resolve
@@ -68,30 +77,26 @@ const writeFile = file => {
   fileCache[out] = file
 
   // write file to disk
-  return new Promise((resolve, reject) => {
-    // create directory for file if it does not exist
-    const outDir = out
-      .split('/')
-      .slice(0, -1)
-      .join('/')
-    mkdirSync(outDir)
+  // create directory for file if it does not exist
+  const outDir = out
+    .split('/')
+    .slice(0, -1)
+    .join('/')
+  
+  try {
+    await fs.mkdir(outDir)
+    const written = await fs.writeFile(out, bundle)
 
-    fs.writeFile(out, bundle, err => {
-      if (err) {
-        reject(err)
-        return
-      }
+    log.success('writeFile', out)
 
-      log.success('writeFile', out)
-
-      resolve(file)
-    })
-  }).catch(log.error)
+    return written
+  }
+  catch (e) {
+    throw e
+  }
 }
 
-const prepareData = args => new Promise(resolve => resolve(args))
-
-const handleWatchUpdate = ({ event, name, initDone, devWatcher }) => {
+const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
   if (name.indexOf(conf.BUNDLE_DIR) < 0) {
     if (initDone) {
       log('stopping watcher', name)
@@ -103,17 +108,25 @@ const handleWatchUpdate = ({ event, name, initDone, devWatcher }) => {
 
   // gets called on first run of watch dir indexing
   if (event === 'add' || event === 'change') {
-    prepareData({ name })
-      .then(getFileContent)
-      .then(transpileFile)
-      .then(writeFile)
-      .catch(log.error)
+    try {
+      const { buffer, out } = await getFileContent({ name })
+      const bundle = await transpileFile({ name, buffer })
+      const written = await write({ buffer, bundle, out })
+    }
+    catch(e) {
+      throw e
+    }
 
     return
   }
 
   if (event === 'addDir') {
-    mkdirSync(name)
+    try {
+      await fs.mkdir(name)
+    }
+    catch(e) {
+      throw e
+    }
 
     return
   }
@@ -121,7 +134,7 @@ const handleWatchUpdate = ({ event, name, initDone, devWatcher }) => {
   log('Unhandled watch event:', { event, name })
 }
 
-const watcher = (resolve, reject) => {
+const watcher = () => {
   log('Watching', conf.SRC_DIR)
 
   let initDone = false
@@ -130,31 +143,31 @@ const watcher = (resolve, reject) => {
     ignored: ['**/node_modules/**', '**/public/**', '**/public', '**/.git/**'],
   })
 
-  devWatcher
-    .on('all', (event, name) => handleWatchUpdate({ event, name, devWatcher, initDone, conf }))
-    .on('ready', () => {
-      initDone = true
-
-      if (!conf.WATCH && !conf.SERVE) {
-        devWatcher.close()
+  return new Promise((resolve, reject) => {
+    devWatcher
+      .on('all', (event, name) => handleWatchUpdate({ event, name, devWatcher, initDone, conf }))
+      .on('ready', () => {
+        initDone = true
+      
+        if (!conf.WATCH && !conf.SERVE) {
+          devWatcher.close()
+        }
         resolve()
-      }
-    })
+      })
+  })
 }
 
-const build = () => {
+const build = async () => {
   if (!conf.TASKS.BUILD) {
     return
   }
 
-  return new Promise((resolve, reject) => {
-    // actually run the app:
-    watcher(resolve, reject)
+  // actually run the app:
+  await watcher()
 
-    if (conf.SERVE) {
-      serve(conf)
-    }
-  })
+  if (conf.SERVE) {
+    serve(conf)
+  }
 }
 
 module.exports = build

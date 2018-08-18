@@ -1,9 +1,11 @@
+const util = require('util')
 const browserSync = require('browser-sync')
+const sync = util.promisify(browserSync)
 
 const log = require('../log')
 const conf = require('../config')()
 
-const serve = () => {
+const serve = async () => {
   const bsConfig = {
     server: {
       baseDir: conf.OUT_DIR,
@@ -16,14 +18,7 @@ const serve = () => {
     open: false,
   }
 
-  browserSync(bsConfig, (err, bs) => {
-    if (err) {
-      log.error(err)
-      return
-    }
-    const url = bs.options.getIn(['urls', 'local'])
-    log.success('server listening to http://', url)
-  })
+  await browserSync(bsConfig)
 }
 
 module.exports = serve
