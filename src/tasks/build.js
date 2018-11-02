@@ -1,5 +1,6 @@
 const fso = require('fs')
 const util = require('util')
+const path = require('path')
 
 const chokidar = require('chokidar')
 const is = require('@magic/types')
@@ -49,15 +50,9 @@ const transpileFile = async file => {
 
   const transpiler = conf.TRANSPILERS[type.toUpperCase()]
   if (is.fn(transpiler)) {
-    const bundler = Object.assign({}, file, { buffer })
+    const bundler = Object.assign({}, file, { buffer, config: conf })
 
-    try {
-      return await transpiler(bundler)
-      return bundle
-    }
-    catch (e) {
-      throw e
-    }
+    return await transpiler(bundler)
   }
 
   // transpiler does not exist, just return stringified buffer as bundle
@@ -79,55 +74,33 @@ const write = async file => {
 
   // write file to disk
   // create directory for file if it does not exist
-  const outDir = out
-    .split('/')
-    .slice(0, -1)
-    .join('/')
+  const outDir = path.dirname(out)
 
-  try {
-    await fs.mkdir(outDir)
-    const written = await fs.writeFile(out, bundle)
+  await mkdirp(outDir)
+  const written = await fs.writeFile(out, bundle)
 
-    log.success('writeFile', out)
+  log.success('writeFile', out)
 
-    return written
-  }
-  catch (e) {
-    throw e
-  }
+  return written
 }
 
 const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
+  // if file is not in src dir, we do not have to do anything.
   if (name.indexOf(conf.BUNDLE_DIR) < 0) {
-    if (initDone) {
-      log('stopping watcher', name)
-      devWatcher.close()
-      watcher()
-    }
     return
   }
 
   // gets called on first run of watch dir indexing
   if (event === 'add' || event === 'change') {
-    try {
-      const { buffer, out } = await getFileContent({ name })
-      const bundle = await transpileFile({ name, buffer })
-      const written = await write({ buffer, bundle, out })
-    }
-    catch(e) {
-      throw e
-    }
+    const { buffer, out } = await getFileContent({ name })
+    const bundle = await transpileFile({ name, buffer })
+    const written = await write({ buffer, bundle, out })
 
-    return
+    return written
   }
 
   if (event === 'addDir') {
-    try {
-      await fs.mkdir(name)
-    }
-    catch(e) {
-      throw e
-    }
+    await fs.mkdir(name)
 
     return
   }
@@ -146,7 +119,14 @@ const watcher = () => {
 
   return new Promise((resolve, reject) => {
     devWatcher
-      .on('all', (event, name) => handleWatchUpdate({ event, name, devWatcher, initDone, conf }))
+      .on('all', (event, name) => {
+        try {
+          handleWatchUpdate({ event, name, devWatcher, initDone, conf })
+        }
+        catch(e) {
+          throw e
+        }
+      })
       .on('ready', () => {
         initDone = true
 
@@ -164,10 +144,15 @@ const build = async () => {
   }
 
   // actually run the app:
-  await watcher()
+  try {
+    await watcher()
 
-  if (conf.SERVE) {
-    serve(conf)
+    if (conf.SERVE) {
+      serve(conf)
+    }
+  }
+  catch(e) {
+    throw e
   }
 }
 
