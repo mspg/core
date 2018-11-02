@@ -5,6 +5,7 @@ const chokidar = require('chokidar')
 const is = require('@magic/types')
 
 const serve = require('./serve')
+const mkdirp = require('./mkdirp')
 
 const log = require('../log')
 const conf = require('../config')()
@@ -24,20 +25,20 @@ const mkdir = async path => {
 const fs = {
   readFile: util.promisify(fso.readFile),
   writeFile: util.promisify(fso.writeFile),
-  mkdir,
+  mkdir: mkdirp,
 }
 
 const getFileContent = async file => {
   const { name } = file
 
   const buffer = await fs.readFile(name)
-  
+
   const out = name.replace(conf.BUNDLE_DIR, conf.OUT_DIR)
 
-  return { 
-    name, 
-    buffer, 
-    out, 
+  return {
+    name,
+    buffer,
+    out,
   }
 }
 
@@ -49,7 +50,7 @@ const transpileFile = async file => {
   const transpiler = conf.TRANSPILERS[type.toUpperCase()]
   if (is.fn(transpiler)) {
     const bundler = Object.assign({}, file, { buffer })
- 
+
     try {
       return await transpiler(bundler)
       return bundle
@@ -82,7 +83,7 @@ const write = async file => {
     .split('/')
     .slice(0, -1)
     .join('/')
-  
+
   try {
     await fs.mkdir(outDir)
     const written = await fs.writeFile(out, bundle)
@@ -148,7 +149,7 @@ const watcher = () => {
       .on('all', (event, name) => handleWatchUpdate({ event, name, devWatcher, initDone, conf }))
       .on('ready', () => {
         initDone = true
-      
+
         if (!conf.WATCH && !conf.SERVE) {
           devWatcher.close()
         }
