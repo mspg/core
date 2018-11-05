@@ -11,18 +11,6 @@ const mkdirp = require('./mkdirp')
 const log = require('../log')
 const conf = require('../config')()
 
-const mkd = util.promisify(fso.mkdir)
-
-const mkdir = async path => {
-  try {
-    await mkd(path)
-  } catch (e) {
-    if (e.code !== 'EEXIST') {
-      throw e
-    }
-  }
-}
-
 const fs = {
   readFile: util.promisify(fso.readFile),
   writeFile: util.promisify(fso.writeFile),
@@ -47,6 +35,11 @@ const transpileFile = async file => {
   const { name, buffer } = file
   const typeArray = name.split('.')
   const type = typeArray[typeArray.length - 1]
+
+  if (conf.IGNORE_EXTENSIONS.indexOf(type) > -1) {
+    log.info('File ignored by extension', name)
+    return
+  }
 
   const transpiler = conf.TRANSPILERS[type.toUpperCase()]
   if (is.fn(transpiler)) {
@@ -79,24 +72,21 @@ const write = async file => {
   await mkdirp(outDir)
   const written = await fs.writeFile(out, bundle)
 
-  log.success('writeFile', out)
+  log.info('writeFile', out)
 
   return written
 }
 
 const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
-  // if file is not in src dir, we do not have to do anything.
-  if (name.indexOf(conf.BUNDLE_DIR) < 0) {
-    return
-  }
-
   // gets called on first run of watch dir indexing
   if (event === 'add' || event === 'change') {
     const { buffer, out } = await getFileContent({ name })
     const bundle = await transpileFile({ name, buffer })
-    const written = await write({ buffer, bundle, out })
 
-    return written
+    if (bundle) {
+      return await write({ buffer, bundle, out })
+    }
+    return
   }
 
   if (event === 'addDir') {
@@ -105,36 +95,40 @@ const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
     return
   }
 
+  // if (event === 'unlink') {
+  //
+  // }
+
   log('Unhandled watch event:', { event, name })
 }
 
 const watcher = () => {
-  log('Watching', conf.SRC_DIR)
+  const watchDirs = [conf.INCLUDES_DIR, conf.BUNDLE_DIR, path.join(conf.SRC_DIR, 'config.js')]
+
+  log('Watching', watchDirs)
 
   let initDone = false
 
-  const devWatcher = chokidar.watch(conf.SRC_DIR, {
+  const devWatcher = chokidar.watch(watchDirs, {
     ignored: ['**/node_modules/**', '**/public/**', '**/public', '**/.git/**'],
   })
 
   return new Promise((resolve, reject) => {
     devWatcher
-      .on('all', (event, name) => {
-        try {
-          handleWatchUpdate({ event, name, devWatcher, initDone, conf })
-        }
-        catch(e) {
-          throw e
-        }
-      })
+      .on(
+        'all',
+        async (event, name) => await handleWatchUpdate({ event, name, devWatcher, initDone, conf }),
+      )
       .on('ready', () => {
         initDone = true
 
         if (!conf.WATCH && !conf.SERVE) {
           devWatcher.close()
         }
+
         resolve()
       })
+      .on('error', console.log)
   })
 }
 
@@ -143,15 +137,14 @@ const build = async () => {
     return
   }
 
-  // actually run the app:
+  // actually run the task:
   try {
     await watcher()
 
     if (conf.SERVE) {
       serve(conf)
     }
-  }
-  catch(e) {
+  } catch (e) {
     throw e
   }
 }
