@@ -11,15 +11,13 @@ const build = async () => {
     await tasks.lint()
 
     await tasks.zip()
-    
+
     await tasks.publish()
 
     log.success('build done')
-  }
-  catch(e) {
+  } catch (e) {
     throw e
   }
-
 }
 
 build()
