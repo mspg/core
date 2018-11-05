@@ -19,6 +19,8 @@ defaultConfig.WATCH = argv.indexOf('noWatch') < 0
 defaultConfig.SERVE = argv.indexOf('noServe') < 0
 defaultConfig.GIT_ORIGIN = 'origin'
 defaultConfig.GIT_BRANCH = 'gh-pages'
+defaultConfig.IGNORE_EXTENSIONS = []
+defaultConfig.VERBOSE = argv.indexOf('verbose') > -1
 
 defaultConfig.LINT = {
   HTML: argv.indexOf('html') > -1,
