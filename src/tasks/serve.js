@@ -2,7 +2,8 @@ const util = require('util')
 const browserSync = require('browser-sync')
 const sync = util.promisify(browserSync)
 
-const log = require('../log')
+const log = require('@magic/log')
+
 const conf = require('../config')()
 
 const serve = async () => {
