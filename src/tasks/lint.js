@@ -58,18 +58,20 @@ const lintCss = async () => {
   let timesReturned = 0
 
   try {
-    await Promise.all(filesToLint.map(async dir => {
-      const cmd = `${executable} --config ${configPath} ${dir}`
-      // console.log('exec :', cmd)
-      const { stdout } = await xc(cmd)
+    await Promise.all(
+      filesToLint.map(async dir => {
+        const cmd = `${executable} --config ${configPath} ${dir}`
+        // console.log('exec :', cmd)
+        const { stdout } = await xc(cmd)
 
-      log('stylint results:', stdout)
+        log('stylint results:', stdout)
 
-      timesReturned += 1
-      if (timesReturned >= filesToLint.length) {
-        return
-      }
-    }))
+        timesReturned += 1
+        if (timesReturned >= filesToLint.length) {
+          return
+        }
+      }),
+    )
   } catch (e) {
     log.error(e)
   }
