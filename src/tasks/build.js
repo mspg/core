@@ -153,7 +153,7 @@ const watcher = () => {
 
         resolve()
       })
-      .on('error', console.log)
+      .on('error', log.error)
   })
 }
 
