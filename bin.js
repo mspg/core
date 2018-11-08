@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const log = require('./src/log')
+const log = require('@magic/log')
 
 const tasks = require('./src/tasks')
 
