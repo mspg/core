@@ -1,16 +1,23 @@
 {
-  "name": "@magic/stasis",
+  "name": "@mspg/core",
   "version": "0.0.1",
-  "description": "static site generator",
+  "description": "magic static site generator",
   "main": "./src/index.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com/magic/build"
+    "url": "git@github.com/mspg/core"
   },
   "bin": {
-    "magic-stasis": "./bin.js"
+    "mspg": "./bin.js"
   },
-  "author": "Jascha Ehrenreich <dev@jaeh.at>",
+  "author": "Wizards & Witches",
+  "license": "AGPL-3.0",
+  "contributors": [
+    {
+      "name": "jascha ehrenreich",
+      "github": "jaeh"
+    }
+  ],
   "license": "AGPL-3.0",
   "dependencies": {
     "@magic/types": "github:magic/types",
