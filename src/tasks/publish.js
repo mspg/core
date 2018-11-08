@@ -32,8 +32,7 @@ const publish = async () => {
     const cmd2 = `git push ${GIT_ORIGIN} ${id.trim()}:${GIT_BRANCH}`
     await xc(cmd2)
     log.success('publish finished')
-  }
-  catch(e) {
+  } catch (e) {
     throw e
   }
 }

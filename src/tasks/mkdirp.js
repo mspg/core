@@ -9,7 +9,7 @@ const fs = {
 }
 
 const mkdirP = async (p, made) => {
-  const mode = _0777 & (~process.umask())
+  const mode = _0777 & ~process.umask()
 
   if (!made) {
     made = null
@@ -22,8 +22,7 @@ const mkdirP = async (p, made) => {
   try {
     await fs.mkdir(p, mode)
     made = made || p
-  }
-  catch (err0) {
+  } catch (err0) {
     if (err0.code === 'ENOENT') {
       made = await mkdirP(path.dirname(p), made)
       await mkdirP(p, made)
@@ -32,7 +31,6 @@ const mkdirP = async (p, made) => {
     } else {
       err = err0
     }
-
   }
 
   try {
@@ -40,8 +38,7 @@ const mkdirP = async (p, made) => {
     if (!stat.isDirectory()) {
       throw err
     }
-  }
-  catch (err1) {
+  } catch (err1) {
     if (err) {
       throw err
     } else {

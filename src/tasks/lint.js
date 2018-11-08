@@ -19,11 +19,10 @@ const lintHtml = async () => {
 
   try {
     const configExists = await exists(config)
-    if ( !configExists ) {
+    if (!configExists) {
       config = path.join(__dirname, './config/pug-lintrc.js')
     }
-  } 
-  catch(e) {
+  } catch (e) {
     throw e
   }
 
@@ -40,9 +39,8 @@ const lintHtml = async () => {
     log('pug-lint results:', res)
 
     return res
-  }
-  catch(e) {
-    throw e
+  } catch (e) {
+    log.error(e)
   }
 }
 
@@ -58,24 +56,22 @@ const lintCss = async () => {
 
   let timesReturned = 0
 
-  await Promise.all(filesToLint.map(async dir => {
-    const cmd = `${executable} --config ${configPath} ${dir}`
-    // console.log('exec :', cmd)
-    
-    try {
+  try {
+    await Promise.all(filesToLint.map(async dir => {
+      const cmd = `${executable} --config ${configPath} ${dir}`
+      // console.log('exec :', cmd)
       const { stdout } = await xc(cmd)
-  
+
       log('stylint results:', stdout)
 
       timesReturned += 1
       if (timesReturned >= filesToLint.length) {
         return
       }
-    }
-    catch(e) {
-      throw e
-    }
-  }))
+    }))
+  } catch (e) {
+    log.error(e)
+  }
   log('stylint finished')
 }
 
@@ -88,9 +84,8 @@ const lint = async () => {
     await lintHtml()
     await lintCss()
     log('Linting completed')
-  }
-  catch(e) {
-    throw e
+  } catch (e) {
+    log.error(e)
   }
 }
 
