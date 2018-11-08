@@ -18,24 +18,14 @@
       "github": "jaeh"
     }
   ],
-  "license": "AGPL-3.0",
   "dependencies": {
+    "@magic/log": "github:magic/log",
     "@magic/types": "github:magic/types",
-    "autoprefixer-stylus": "0.14.0",
-    "babel-core": "6.26.3",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-minify": "0.5.0",
-    "babel-preset-stage-0": "6.24.1",
     "browser-sync": "2.26.3",
     "chokidar": "2.0.4",
-    "cssnano": "4.1.7",
-    "html-minifier": "3.5.21",
-    "nib": "1.1.2",
     "node-zopfli-es": "1.0.0",
-    "pug": "2.0.3",
     "pug-lint": "2.5.0",
-    "stylint": "1.5.9",
-    "stylus": "0.54.5"
+    "stylint": "1.5.9"
   },
   "devDependencies": {
     "@magic/test": "github:magic/test"
