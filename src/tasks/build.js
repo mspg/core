@@ -44,7 +44,7 @@ const transpileFile = async file => {
   const transpiler = conf.TRANSPILERS[type.toUpperCase()]
   if (is.fn(transpiler)) {
     const bundler = Object.assign({}, file, { buffer, config: conf })
-
+    log('Bundling', file)
     return await transpiler(bundler)
   }
 
@@ -69,7 +69,8 @@ const write = async file => {
   // create directory for file if it does not exist
   const outDir = path.dirname(out)
 
-  await mkdirp(outDir)
+  console.log('mkdir', outDir)
+  await fs.mkdir(outDir)
   const written = await fs.writeFile(out, bundle)
 
   log.info('writeFile', out)
@@ -78,19 +79,42 @@ const write = async file => {
 }
 
 const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
-  // gets called on first run of watch dir indexing
-  if (event === 'add' || event === 'change') {
-    const { buffer, out } = await getFileContent({ name })
-    const bundle = await transpileFile({ name, buffer })
-
-    if (bundle) {
-      return await write({ buffer, bundle, out })
-    }
+  if (!initDone && event === 'change') {
     return
+  }
+  const filesToBuild = []
+  // also gets called on first run of watch dir indexing
+  if (event === 'add' || event === 'change') {
+    if (name.indexOf(conf.INCLUDES_DIR) > -1) {
+      const [type] = name.replace(conf.INCLUDES_DIR, '').split('/').filter(e => e)
+
+      Object.entries(devWatcher._watched)
+        .filter(([dir]) => dir.indexOf(conf.BUNDLE_DIR) > -1)
+        .forEach(([dir, { _items }]) =>
+          Object.entries(_items)
+            .filter(([item]) => item.indexOf(type) > -1)
+            .forEach(([item]) => filesToBuild.push(`${dir}/${item}`))
+        )
+    } else {
+      filesToBuild.push(name)
+    }
+
+    try {
+      return await Promise.all(filesToBuild.map(async name => {
+        const { buffer, out } = await getFileContent({ name })
+        const bundle = await transpileFile({ name, buffer })
+        if (bundle) {
+          console.log('build', )
+          return await write({ buffer, bundle, out })
+        }
+      }))
+    } catch(e) {
+      log.error(e)
+    }
   }
 
   if (event === 'addDir') {
-    await fs.mkdir(name)
+    await mkdirp(name)
 
     return
   }
@@ -103,7 +127,11 @@ const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
 }
 
 const watcher = () => {
-  const watchDirs = [conf.INCLUDES_DIR, conf.BUNDLE_DIR, path.join(conf.SRC_DIR, 'config.js')]
+  const watchDirs = [
+    conf.INCLUDES_DIR,
+    conf.BUNDLE_DIR,
+    path.join(conf.SRC_DIR, 'config.js'),
+  ]
 
   log('Watching', watchDirs)
 
@@ -115,10 +143,7 @@ const watcher = () => {
 
   return new Promise((resolve, reject) => {
     devWatcher
-      .on(
-        'all',
-        async (event, name) => await handleWatchUpdate({ event, name, devWatcher, initDone, conf }),
-      )
+      .on('all', async (event, name) => await handleWatchUpdate({ event, name, devWatcher, initDone, conf }))
       .on('ready', () => {
         initDone = true
 
