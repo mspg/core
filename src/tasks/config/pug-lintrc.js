@@ -13,7 +13,7 @@ module.exports = {
   disallowIdLiteralsBeforeAttributes: null,
   disallowMultipleLineBreaks: true,
   disallowSpaceAfterCodeOperator: null,
-  disallowSpacesInsideAttributeBrackets: true,
+  disallowSpacesInsideAttributeBrackets: null,
   disallowSpecificAttributes: [{ a: 'name' }],
   disallowSpecificTags: null,
   disallowStringConcatenation: true,
@@ -27,7 +27,7 @@ module.exports = {
   requireLowerCaseAttributes: true,
   requireLowerCaseTags: true,
   requireSpaceAfterCodeOperator: true,
-  requireSpacesInsideAttributeBrackets: true,
+  requireSpacesInsideAttributeBrackets: null,
   requireSpecificAttributes: [
     { form: 'action' },
     // { img: 'alt || role' }, // not working (yet?)
