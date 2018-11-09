@@ -20,7 +20,7 @@ const fs = {
 const getFileContent = async file => {
   const { name } = file
 
-  const buffer = await fs.readFile(name, 'utf8')
+  const buffer = await fs.readFile(name)
 
   const out = name.replace(conf.BUNDLE_DIR, conf.OUT_DIR)
 
@@ -57,7 +57,7 @@ const write = async file => {
   const { buffer, bundle, out } = file
 
   // no changes, resolve
-  if (fileCache[out] && fileCache[out].content === buffer.toString()) {
+  if (fileCache[out] && fileCache[out].content === buffer) {
     return file
   }
 
@@ -89,6 +89,7 @@ const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
       if (event === 'add') {
         return
       }
+
       const [type] = name
         .replace(conf.INCLUDES_DIR, '')
         .split('/')
