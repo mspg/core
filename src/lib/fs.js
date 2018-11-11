@@ -7,7 +7,7 @@ const fs = {
   writeFile: util.promisify(fso.writeFile),
   readdir: util.promisify(fso.readdir),
   exists: util.promisify(fso.exists),
-  mkdir: require('./mkdirp'),
+  mkdirp: require('./mkdirp'),
   rmrf: require('./rmrf'),
 }
 
