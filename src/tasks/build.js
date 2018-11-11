@@ -135,7 +135,7 @@ const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
 }
 
 const watcher = () => {
-  const watchDirs = [conf.INCLUDES_DIR, conf.BUNDLE_DIR, path.join(conf.SRC_DIR, 'config.js')]
+  const watchDirs = [conf.INCLUDES_DIR, conf.BUNDLE_DIR, path.join(conf.CWD, 'config.js')]
 
   log('Watching', watchDirs)
 

@@ -20,11 +20,10 @@ const configure = () => {
 
   // config variables
   config.CWD = config.CWD || process.cwd()
-  config.SRC_DIR = config.CWD
   config.ENV = process.env.NODE_ENV || 'development'
-  config.BUILD_DIR = path.join(config.SRC_DIR, 'build')
-  config.INCLUDES_DIR = path.join(config.SRC_DIR, 'includes')
-  config.BUNDLE_DIR = path.join(config.SRC_DIR, 'src')
+  config.BUILD_DIR = path.join(config.CWD, 'build')
+  config.INCLUDES_DIR = path.join(config.CWD, 'includes')
+  config.BUNDLE_DIR = path.join(config.CWD, 'src')
   config.OUT_DIR = path.join(config.CWD, 'public')
   config.CSS_DIR = path.join(config.INCLUDES_DIR, 'css')
   config.HTML_DIR = path.join(config.INCLUDES_DIR, 'html')
