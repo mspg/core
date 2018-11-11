@@ -1,6 +1,7 @@
-const zopfli = require('node-zopfli-es')
 const fs = require('fs')
 const path = require('path')
+
+const zopfli = require('node-zopfli-es')
 
 const log = require('@magic/log')
 
@@ -8,7 +9,7 @@ const conf = require('../config')
 
 const walk = (dir, done) => {
   let results = []
-  fs.readdir(dir, (err, list) => {
+  const list = fs.readdir(dir), (err, list) => {
     if (err) {
       return done(err)
     }

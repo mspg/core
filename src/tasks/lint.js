@@ -1,14 +1,13 @@
 const util = require('util')
 const { exec } = require('child_process')
 const path = require('path')
-const fs = require('fs')
 
 const log = require('@magic/log')
 
 const conf = require('../config')
+const fs = require('../lib/fs')
 
 const xc = util.promisify(exec)
-const exists = util.promisify(fs.exists)
 
 const lintHtml = async () => {
   if (!conf.LINT.HTML) {
@@ -19,7 +18,7 @@ const lintHtml = async () => {
   let config = path.join(conf.BUILD_DIR, 'pug-lintrc.js')
 
   try {
-    const configExists = await exists(config)
+    const configExists = await fs.exists(config)
     if (!configExists) {
       config = path.join(__dirname, './config/pug-lintrc.js')
     }
