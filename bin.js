@@ -8,7 +8,8 @@ const build = async () => {
   try {
     await tasks.build()
 
-    await tasks.lint()
+    // disable until it is using csslint and htmllint
+    // await tasks.lint()
 
     await tasks.zip()
 
