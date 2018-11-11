@@ -7,7 +7,7 @@ const is = require('@magic/types')
 const log = require('@magic/log')
 
 const serve = require('./serve')
-const mkdirp = require('./mkdirp')
+const mkdirp = require('../lib/mkdirp')
 
 const conf = require('../config')()
 
