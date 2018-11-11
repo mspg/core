@@ -9,7 +9,7 @@ const conf = require('../config')
 
 const walk = (dir, done) => {
   let results = []
-  const list = fs.readdir(dir), (err, list) => {
+  const list = fs.readdir(dir, (err, list) => {
     if (err) {
       return done(err)
     }
