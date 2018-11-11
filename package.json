@@ -31,9 +31,10 @@
     "@magic/test": "github:magic/test"
   },
   "scripts": {
-    "test": "t -p",
-    "coverage": "t -c",
+    "start": "t -p",
+    "test": "t",
     "format": "f",
-    "format:fix": "f -w"
+    "format:fix": "f -w",
+    "calls": "calls"
   }
 }

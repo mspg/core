@@ -3,40 +3,53 @@ const path = require('path')
 
 const { argv } = process
 
-// config variables
-const defaultConfig = {}
-defaultConfig.CWD = process.cwd()
-defaultConfig.SRC_DIR = defaultConfig.CWD
-defaultConfig.ENV = process.env.NODE_ENV || 'development'
-defaultConfig.BUILD_DIR = path.join(defaultConfig.SRC_DIR, 'build')
-defaultConfig.INCLUDES_DIR = path.join(defaultConfig.SRC_DIR, 'includes')
-defaultConfig.BUNDLE_DIR = path.join(defaultConfig.SRC_DIR, 'src')
-defaultConfig.OUT_DIR = path.join(defaultConfig.CWD, 'public')
-defaultConfig.CSS_DIR = path.join(defaultConfig.INCLUDES_DIR, 'css')
-defaultConfig.HTML_DIR = path.join(defaultConfig.INCLUDES_DIR, 'html')
-defaultConfig.JS_DIR = path.join(defaultConfig.INCLUDES_DIR, 'js')
-defaultConfig.WATCH = argv.indexOf('noWatch') < 0
-defaultConfig.SERVE = argv.indexOf('noServe') < 0
-defaultConfig.GIT_ORIGIN = 'origin'
-defaultConfig.GIT_BRANCH = 'gh-pages'
-defaultConfig.IGNORE_EXTENSIONS = []
-defaultConfig.VERBOSE = argv.indexOf('verbose') > -1
+let configuration
 
-defaultConfig.LINT = {
-  HTML: argv.indexOf('html') > -1,
-  CSS: argv.indexOf('css') > -1,
+const configure = () => {
+  if (configuration) {
+    return configuration
+  }
+
+  const cwd = process.cwd()
+  const configPath = path.join(cwd, 'config.js')
+  let config = {}
+  if (fs.existsSync(configPath)) {
+    config = require(configPath)
+  }
+
+
+  // config variables
+  config.CWD = config.CWD || process.cwd()
+  config.SRC_DIR = config.CWD
+  config.ENV = process.env.NODE_ENV || 'development'
+  config.BUILD_DIR = path.join(config.SRC_DIR, 'build')
+  config.INCLUDES_DIR = path.join(config.SRC_DIR, 'includes')
+  config.BUNDLE_DIR = path.join(config.SRC_DIR, 'src')
+  config.OUT_DIR = path.join(config.CWD, 'public')
+  config.CSS_DIR = path.join(config.INCLUDES_DIR, 'css')
+  config.HTML_DIR = path.join(config.INCLUDES_DIR, 'html')
+  config.JS_DIR = path.join(config.INCLUDES_DIR, 'js')
+  config.WATCH = argv.indexOf('noWatch') < 0
+  config.SERVE = argv.indexOf('noServe') < 0
+  config.GIT_ORIGIN = 'origin'
+  config.GIT_BRANCH = 'gh-pages'
+  config.IGNORE_EXTENSIONS = []
+  config.VERBOSE = argv.indexOf('verbose') > -1
+
+  config.LINT = {
+    HTML: argv.indexOf('html') > -1,
+    CSS: argv.indexOf('css') > -1,
+  }
+
+  config.TASKS = {
+    BUILD: argv.indexOf('build') > -1,
+    LINT: argv.indexOf('lint') > -1,
+    PUBLISH: argv.indexOf('publish') > -1,
+    ZIP: argv.indexOf('zip') > -1,
+  }
+
+  configuration = config
+  return config
 }
 
-defaultConfig.TASKS = {
-  BUILD: argv.indexOf('build') > -1,
-  LINT: argv.indexOf('lint') > -1,
-  PUBLISH: argv.indexOf('publish') > -1,
-  ZIP: argv.indexOf('zip') > -1,
-}
-
-const configPath = path.join(defaultConfig.CWD, 'config.js')
-
-const config = () =>
-  fs.existsSync(configPath) ? Object.assign(defaultConfig, require(configPath)) : defaultConfig
-
-module.exports = config
+module.exports = configure
