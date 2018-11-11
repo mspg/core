@@ -1,21 +1,12 @@
-const fso = require('fs')
-const util = require('util')
 const path = require('path')
 
-const chokidar = require('chokidar')
 const is = require('@magic/types')
 const log = require('@magic/log')
 
 const serve = require('./serve')
-const mkdirp = require('../lib/mkdirp')
+const fs = require('../lib/fs')
 
 const conf = require('../config')
-
-const fs = {
-  readFile: util.promisify(fso.readFile),
-  writeFile: util.promisify(fso.writeFile),
-  mkdir: mkdirp,
-}
 
 const getFileContent = async file => {
   const { name } = file
@@ -41,14 +32,12 @@ const transpileFile = async file => {
     return
   }
 
-  if (is.empty(conf.TRANSPILERS)) {
-    return buffer
-  }
-
-  const transpiler = conf.TRANSPILERS[type.toUpperCase()]
-  if (is.fn(transpiler)) {
-    const bundler = Object.assign({ buffer, config: conf }, file)
-    return await transpiler(bundler)
+  if (!is.empty(conf.TRANSPILERS)) {
+    const transpiler = conf.TRANSPILERS[type.toUpperCase()]
+    if (is.fn(transpiler)) {
+      const bundler = Object.assign({ buffer, config: conf }, file)
+      return await transpiler(bundler)
+    }
   }
 
   // transpiler does not exist, just return stringified buffer as bundle
@@ -72,7 +61,7 @@ const write = async file => {
   // create directory for file if it does not exist
   const outDir = path.dirname(out)
 
-  await fs.mkdir(outDir)
+  await fs.mkdirp(outDir)
   const written = await fs.writeFile(out, bundle)
 
   log.info('writeFile', out)
@@ -80,92 +69,65 @@ const write = async file => {
   return written
 }
 
-const handleWatchUpdate = async ({ event, name, initDone, devWatcher }) => {
-  if (!initDone && event === 'change') {
-    return
+const getFiles = async (dirs = [process.cwd()]) => {
+  if (is.string(dirs)) {
+    dirs = [dirs]
   }
 
-  const filesToBuild = []
-  // also gets called on first run of watch dir indexing
-  if (event === 'add' || event === 'change') {
-    if (name.indexOf(conf.INCLUDES_DIR) > -1) {
-      // prevent initial build from building src files multiple times (for each include file of their type that is)
-      if (event === 'add') {
-        return
-      }
+  const files = {}
 
-      const [type] = name
-        .replace(conf.INCLUDES_DIR, '')
-        .split('/')
-        .filter(e => e)
-
-      Object.entries(devWatcher._watched)
-        .filter(([dir]) => dir.indexOf(conf.BUNDLE_DIR) > -1)
-        .forEach(([dir, { _items }]) =>
-          Object.entries(_items)
-            .filter(([item]) => item.indexOf(type) > -1)
-            .forEach(([item]) => filesToBuild.push(`${dir}/${item}`)),
-        )
-    } else {
-      filesToBuild.push(name)
+  await Promise.all(dirs.map(async name => {
+    if (!await fs.exists(name)) {
+      return
     }
 
-    try {
-      return await Promise.all(
-        filesToBuild.map(async name => {
-          const { buffer, out } = await getFileContent({ name })
-          const bundle = await transpileFile({ name, buffer })
-          if (bundle) {
-            return await write({ buffer, bundle, out })
-          }
-        }),
-      )
-    } catch (e) {
-      log.error(e)
+    const stat = await fs.stat(name)
+
+    if (stat.isFile()) {
+      files[name] = stat.mtime.getTime()
+    } else if (stat.isDirectory()) {
+      const f = await fs.readdir(name)
+      const addFiles = await getFiles(f.map(file => path.join(name, file)))
+      Object.assign(files, addFiles)
     }
-  }
+  }))
 
-  if (event === 'addDir') {
-    await mkdirp(name)
-
-    return
-  }
-
-  // if (event === 'unlink') {
-  //
-  // }
-
-  log('Unhandled watch event:', { event, name })
+  return files
 }
 
-const watcher = () => {
-  const watchDirs = [conf.INCLUDES_DIR, conf.BUNDLE_DIR, path.join(conf.CWD, 'config.js')]
+const watchedFiles = {
+  bundle: [],
+  includes: [],
+}
 
-  log('Watching', watchDirs)
+const hasFileChanged = ([k, t]) => t > watchedFiles.bundle[k]
 
-  let initDone = false
+const watch = async () => {
+  const files = await getFiles(conf.BUNDLE_DIR)
 
-  const devWatcher = chokidar.watch(watchDirs, {
-    ignored: ['**/node_modules/**', '**/public/**', '**/public', '**/.git/**'],
-  })
+  let changedFiles = []
+  if (is.empty(watchedFiles.bundle)) {
+    changedFiles = Object.keys(files)
+  } else {
+    changedFiles = Object.entries(files)
+      .filter(hasFileChanged)
+      .map(([k]) => k)
+  }
 
-  return new Promise((resolve, reject) => {
-    devWatcher
-      .on(
-        'all',
-        async (event, name) => await handleWatchUpdate({ event, name, devWatcher, initDone }),
-      )
-      .on('ready', () => {
-        initDone = true
+  // watchedFiles.includes = includes
+  watchedFiles.bundle = files
 
-        if (!conf.WATCH && !conf.SERVE) {
-          devWatcher.close()
-        }
+  await Promise.all(changedFiles.map(async name => {
+    const { buffer, out } = await getFileContent({ name })
+    const bundle = await transpileFile({ name, buffer })
+    if (bundle) {
+      await write({ buffer, bundle, out })
+    }
+  }))
 
-        resolve()
-      })
-      .on('error', log.error)
-  })
+  if (conf.WATCH) {
+    setTimeout(watch, 300)
+  }
 }
 
 const build = async () => {
@@ -175,7 +137,7 @@ const build = async () => {
 
   // actually run the task:
   try {
-    await watcher()
+    watch()
 
     if (conf.SERVE) {
       serve()
