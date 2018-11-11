@@ -23,9 +23,7 @@
     "@magic/types": "github:magic/types",
     "browser-sync": "2.26.3",
     "chokidar": "2.0.4",
-    "node-zopfli-es": "1.0.0",
-    "pug-lint": "2.5.0",
-    "stylint": "1.5.9"
+    "node-zopfli-es": "1.0.0"
   },
   "devDependencies": {
     "@magic/test": "github:magic/test"
