@@ -9,6 +9,10 @@ const fs = {
 }
 
 const mkdirP = async (p, made) => {
+  if (!p) {
+    throw new Error('mkdirp needs an argument')
+  }
+
   const mode = _0777 & ~process.umask()
 
   if (!made) {
@@ -22,14 +26,14 @@ const mkdirP = async (p, made) => {
   try {
     await fs.mkdir(p, mode)
     made = made || p
-  } catch (err0) {
-    if (err0.code === 'ENOENT') {
+  } catch (e) {
+    if (e.code === 'ENOENT') {
       made = await mkdirP(path.dirname(p), made)
       await mkdirP(p, made)
-    } else if (err0.code === 'EEXIST') {
+    } else if (e.code === 'EEXIST') {
       err = null
     } else {
-      err = err0
+      err = e
     }
   }
 
