@@ -31,6 +31,8 @@
   "scripts": {
     "start": "t -p",
     "test": "t",
+    "build": "NODE_ENV=production ./bin.js build noWatch noServe zip",
+    "dev": "./bin.js build",
     "format": "f",
     "format:fix": "f -w",
     "calls": "calls"
