@@ -36,5 +36,9 @@
     "format": "f",
     "format:fix": "f -w",
     "calls": "calls"
-  }
+  },
+  "files": [
+    "src",
+    "bin.js"
+  ]
 }
