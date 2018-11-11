@@ -4,7 +4,7 @@ const sync = util.promisify(browserSync)
 
 const log = require('@magic/log')
 
-const conf = require('../config')()
+const conf = require('../config')
 
 const serve = async () => {
   const bsConfig = {

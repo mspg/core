@@ -4,7 +4,7 @@ const path = require('path')
 
 const log = require('@magic/log')
 
-const conf = require('../config')()
+const conf = require('../config')
 
 const walk = (dir, done) => {
   let results = []

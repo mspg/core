@@ -3,7 +3,7 @@ const { exec } = require('child_process')
 
 const log = require('@magic/log')
 
-const conf = require('../config')()
+const conf = require('../config')
 const { TASKS, GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
 
 const xc = util.promisify(exec)

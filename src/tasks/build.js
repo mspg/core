@@ -9,7 +9,7 @@ const log = require('@magic/log')
 const serve = require('./serve')
 const mkdirp = require('../lib/mkdirp')
 
-const conf = require('../config')()
+const conf = require('../config')
 
 const fs = {
   readFile: util.promisify(fso.readFile),
@@ -39,6 +39,10 @@ const transpileFile = async file => {
   if (conf.IGNORE_EXTENSIONS.indexOf(type) > -1) {
     log.info('File ignored by extension', name)
     return
+  }
+
+  if (is.empty(conf.TRANSPILERS)) {
+    return buffer
   }
 
   const transpiler = conf.TRANSPILERS[type.toUpperCase()]
@@ -149,7 +153,7 @@ const watcher = () => {
     devWatcher
       .on(
         'all',
-        async (event, name) => await handleWatchUpdate({ event, name, devWatcher, initDone, conf }),
+        async (event, name) => await handleWatchUpdate({ event, name, devWatcher, initDone }),
       )
       .on('ready', () => {
         initDone = true
@@ -174,7 +178,7 @@ const build = async () => {
     await watcher()
 
     if (conf.SERVE) {
-      serve(conf)
+      serve()
     }
   } catch (e) {
     throw e

@@ -5,7 +5,7 @@ const fs = require('fs')
 
 const log = require('@magic/log')
 
-const conf = require('../config')()
+const conf = require('../config')
 
 const xc = util.promisify(exec)
 const exists = util.promisify(fs.exists)
