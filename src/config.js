@@ -33,6 +33,7 @@ config.LINT = {
 }
 
 config.TASKS = {
+  CLEAN: argv.indexOf('clean') > -1 || config.ENV === 'production',
   BUILD: argv.indexOf('build') > -1,
   LINT: argv.indexOf('lint') > -1,
   PUBLISH: argv.indexOf('publish') > -1,

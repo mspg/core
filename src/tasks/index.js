@@ -4,4 +4,5 @@ module.exports = {
   publish: require('./publish'),
   zip: require('./zip'),
   connect: require('./connect'),
+  clean: require('./clean'),
 }
