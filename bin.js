@@ -6,9 +6,11 @@ const tasks = require('./src/tasks')
 
 const build = async () => {
   try {
+    await tasks.connect()
+    
     await tasks.build()
 
-    // disable until it is using csslint and htmllint
+    // disable until it is using csslint and htmllint instead of puglint and stylint
     // await tasks.lint()
 
     await tasks.zip()
