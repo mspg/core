@@ -3,4 +3,5 @@ module.exports = {
   lint: require('./lint'),
   publish: require('./publish'),
   zip: require('./zip'),
+  connect: require('./connect'),
 }
