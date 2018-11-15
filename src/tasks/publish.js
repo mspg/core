@@ -27,8 +27,6 @@ const publish = async () => {
     const { stdout } = await xc(cmd)
     const id = stdout.trim()
 
-    console.log(id)
-
     const cmd2 = `git push ${GIT_ORIGIN} ${id.trim()}:${GIT_BRANCH}`
     await xc(cmd2)
     log.success('publish finished')
