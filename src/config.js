@@ -20,8 +20,8 @@ config.OUT_DIR = path.join(config.CWD, 'public')
 config.CSS_DIR = path.join(config.INCLUDES_DIR, 'css')
 config.HTML_DIR = path.join(config.INCLUDES_DIR, 'html')
 config.JS_DIR = path.join(config.INCLUDES_DIR, 'js')
-config.WATCH = argv.indexOf('noWatch') < 0
-config.SERVE = argv.indexOf('noServe') < 0
+config.WATCH = argv.indexOf('watch') > -1
+config.SERVE = argv.indexOf('serve') > -1
 config.GIT_ORIGIN = 'origin'
 config.GIT_BRANCH = 'gh-pages'
 config.IGNORE_EXTENSIONS = []
@@ -37,6 +37,7 @@ config.TASKS = {
   LINT: argv.indexOf('lint') > -1,
   PUBLISH: argv.indexOf('publish') > -1,
   ZIP: argv.indexOf('zip') > -1,
+  CONNECT: argv.indexOf('connect') > -1,
 }
 
 module.exports = config
