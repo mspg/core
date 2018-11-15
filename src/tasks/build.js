@@ -57,11 +57,11 @@ const write = async file => {
   // write file to "cache"
   fileCache[out] = file
 
-  // write file to disk
   // create directory for file if it does not exist
   const outDir = path.dirname(out)
-
   await fs.mkdirp(outDir)
+
+  // write file to disk
   const written = await fs.writeFile(out, bundle)
 
   log.info('writeFile', out)
