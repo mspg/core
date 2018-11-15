@@ -31,11 +31,13 @@
   "scripts": {
     "start": "t -p",
     "test": "t",
-    "build": "NODE_ENV=production ./bin.js build noWatch noServe zip",
-    "dev": "./bin.js build",
+    "build": "NODE_ENV=production ./bin.js build zip",
+    "dev": "./bin.js build serve watch",
     "format": "f",
     "format:fix": "f -w",
-    "calls": "calls"
+    "calls": "calls",
+    "connect": "NODE_ENV=production ./bin.js connect",
+    "publish": "NODE_ENV=production ./bin.js build zip publish"
   },
   "files": [
     "src",
