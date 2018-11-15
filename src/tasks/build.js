@@ -137,7 +137,7 @@ const build = async () => {
 
   // actually run the task:
   try {
-    watch()
+    await watch()
 
     if (conf.SERVE) {
       serve()
