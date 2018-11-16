@@ -18,7 +18,7 @@ const build = async () => {
 
     await tasks.publish()
 
-    log.success('build done')
+    log.success('done')
   } catch (e) {
     throw e
   }
