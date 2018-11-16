@@ -98,27 +98,29 @@ const zipFile = file => {
 }
 
 // main task, compresses all files in the public dir
-const zip = () =>
-  new Promise((resolve, reject) => {
-    if (!conf.TASKS.ZIP) {
-      resolve()
+const zip = async () => {
+  if (!conf.TASKS.ZIP) {
+    return
+  }
+    
+  log('start zipping')
+  log.time('zip')
+
+  walk(conf.OUT_DIR, async (err, files) => {
+    if (err) {
+      log.error(err)
       return
     }
 
-    walk(conf.OUT_DIR, (err, files) => {
-      if (err) {
-        log.error(err)
-        return
-      }
-
-      const promises = files.map(zipFile)
-      Promise.all(promises)
-        .then(() => {
-          console.log('zipping finished')
-          resolve()
-        })
-        .catch(reject)
-    })
+    const promises = files.map(zipFile)
+    try {
+      await Promise.all(promises)
+      log.timeEnd('zip')
+    } catch (e) {
+      throw e
+    }
   })
+}
+
 
 module.exports = zip
