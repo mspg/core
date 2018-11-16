@@ -135,6 +135,9 @@ const build = async () => {
     return
   }
 
+  log('start build')
+  log.time('build')
+
   // actually run the task:
   try {
     await watch()
@@ -142,9 +145,12 @@ const build = async () => {
     if (conf.SERVE) {
       serve()
     }
+
   } catch (e) {
     throw e
   }
+
+  log.timeEnd('build')
 }
 
 module.exports = build

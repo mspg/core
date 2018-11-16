@@ -15,9 +15,11 @@ const connect = async () => {
     return
   }
 
-  const outDir = OUT_DIR.replace(`${process.cwd()}/`, '')
-  console.log(outDir, TASKS)
+  log.info('start connect')
+  log.time('connect')
 
+  const outDir = OUT_DIR.replace(`${process.cwd()}/`, '')
+  
   const cmdPrefix = `--prefix=${outDir}`
   const cmdOnto = `${GIT_ORIGIN} ${GIT_BRANCH}`
   const cmdArgv = `${cmdPrefix} ${cmdOnto}`
@@ -27,10 +29,11 @@ const connect = async () => {
 
   try {
     const { stdout } = await xc(cmd)
-    log.success('connect finished')
   } catch (e) {
     throw e
   }
+
+  log.timeEnd('connect')
 }
 
 module.exports = connect
