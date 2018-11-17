@@ -22,11 +22,15 @@ const getFileContent = async file => {
   }
 }
 
+const getFileType = name => {
+  const typeArray = name.split('.')
+  const fileType = typeArray[typeArray.length - 1]
+  return fileType
+}
+
 const transpileFile = async file => {
   const { name, buffer } = file
-  const typeArray = name.split('.')
-  const type = typeArray[typeArray.length - 1]
-
+  const type = getFileType(name)
   if (conf.IGNORE_EXTENSIONS.indexOf(type) > -1) {
     log.info('File ignored by extension', name)
     return
@@ -34,7 +38,7 @@ const transpileFile = async file => {
 
   if (!is.empty(conf.TRANSPILERS)) {
     const transpiler = conf.TRANSPILERS[type.toUpperCase()]
-    if (is.fn(transpiler)) {
+    if (is.function(transpiler)) {
       const bundler = Object.assign({ buffer, config: conf }, file)
       return await transpiler(bundler)
     }
@@ -42,6 +46,18 @@ const transpileFile = async file => {
 
   // transpiler does not exist, just return stringified buffer as bundle
   return buffer
+}
+
+const minifyFile = file => {
+  const { name, bundle } = file
+  const type = getFileType(name)
+  const minifier = conf.MINIFY[type.toUpperCase()]
+  if (is.function(minifier)) {
+    const minified = minifier(bundle.toString())
+    return minified
+  }
+
+  return file.bundle
 }
 
 const fileCache = {}
@@ -58,8 +74,7 @@ const write = async file => {
   fileCache[out] = file
 
   // create directory for file if it does not exist
-  const outDir = path.dirname(out)
-  await fs.mkdirp(outDir)
+  await fs.mkdirp(path.dirname(out))
 
   // write file to disk
   const written = await fs.writeFile(out, bundle)
@@ -124,7 +139,8 @@ const watch = async () => {
       const { buffer, out } = await getFileContent({ name })
       const bundle = await transpileFile({ name, buffer })
       if (bundle) {
-        await write({ buffer, bundle, out })
+        const minified = await minifyFile({ name, bundle })
+        await write({ buffer, bundle: minified, out })
       }
     }),
   )

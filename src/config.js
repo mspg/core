@@ -41,4 +41,9 @@ config.TASKS = {
   CONNECT: argv.indexOf('connect') > -1,
 }
 
+config.MINIFY = {
+  HTML: require('./lib/minify/html'),
+  CSS: require('./lib/minify/css'),
+}
+
 module.exports = config
