@@ -41,9 +41,5 @@
     "calls": "calls",
     "connect": "NODE_ENV=production ./bin.js connect",
     "publish": "NODE_ENV=production ./bin.js build zip publish"
-  },
-  "files": [
-    "src",
-    "bin.js"
-  ]
+  }
 }
