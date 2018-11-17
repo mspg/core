@@ -55,16 +55,16 @@ both html toolchains below follow the same rules:
 * every includes/html/*.extension file is an include file and can be included using /filename.extension
 * every includes/html/*.extension file can also be a template file. using extend you can reuse a html template in both pug and posthtml. 
 
-[pug](https://github.com/mspg/transpile-pug)
-[posthtml](https://github.com/mspg/transpile-posthtml)
+* [pug](https://github.com/mspg/transpile-pug)
+* [posthtml](https://github.com/mspg/transpile-posthtml)
 
 ###### css
-[stylus](https://github.com/mspg/transpile-stylus)
-postcss - soon
+* [stylus](https://github.com/mspg/transpile-stylus)
+* postcss - soon
 
 ###### js
-[babel](https://github.com/mspg/transpile-babel)
-rollup - soon
+* [babel](https://github.com/mspg/transpile-babel)
+* rollup - soon
 
 [npm-image]: https://img.shields.io/npm/v/@mspg/core.svg
 [npm-url]: https://www.npmjs.com/package/@mspg/core
