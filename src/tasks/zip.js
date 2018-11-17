@@ -1,5 +1,6 @@
-const fs = require('fs')
+const nfs = require('fs')
 const path = require('path')
+const util = require('util')
 
 const zopfli = require('node-zopfli-es')
 
@@ -7,47 +8,32 @@ const log = require('@magic/log')
 
 const conf = require('../config')
 
-const walk = (dir, done) => {
-  let results = []
-  const list = fs.readdir(dir, (err, list) => {
-    if (err) {
-      return done(err)
-    }
+const fs = {
+  readdir: util.promisify(nfs.readdir),
+  stat: util.promisify(nfs.stat),
+}
 
-    let pending = list.length
+const walk = async (dir, done) => {
+  try {
+    let results = []
+    const list = await fs.readdir(dir)
 
-    if (pending === 0) {
-      return done(null, results)
-    }
-
-    list.forEach(file => {
+    await Promise.all(list.map(async file => {
       file = path.resolve(dir, file)
-      fs.stat(file, (statErr, stat) => {
-        if (statErr) {
-          log.error(statErr)
-        }
-        if (stat && stat.isDirectory()) {
-          walk(file, (walkErr, res) => {
-            if (walkErr) {
-              log.error(walkErr)
-            }
-            results = results.concat(res)
+      const stat = await fs.stat(file)
 
-            pending -= 1
-            if (pending === 0) {
-              done(null, results)
-            }
-          })
-        } else {
-          results.push(file)
-          pending -= 1
-          if (pending === 0) {
-            done(null, results)
-          }
-        }
-      })
-    })
-  })
+      if (stat.isDirectory()) {
+        const res = await walk(file)
+        results = results.concat(res)
+      } else if (stat.isFile()) {
+        results.push(file)
+      }
+    }))
+
+    return results
+  } catch (e) {
+    throw e
+  }
 }
 
 // simply tests if a file ends with .gz
@@ -76,17 +62,17 @@ const zipFile = file => {
       blocksplittingmax: 15,
     }
     const zopferl = zopfli.createGzip(options)
-    const writeStream = fs.createWriteStream(gzFileName)
+    const writeStream = nfs.createWriteStream(gzFileName)
 
-    const readStream = fs
+    const readStream = nfs
       .createReadStream(file)
       .pipe(zopferl)
       .pipe(writeStream)
 
     readStream.on('error', reject)
     writeStream.on('error', reject)
-    writeStream.on('close', () => {
-      const [gzSize, origSize] = [gzFileName, file].map(f => fs.statSync(f).size)
+    writeStream.on('close', async () => {
+      const [gzSize, origSize] = await Promise.all([gzFileName, file].map(async f => await fs.stat(f).size))
       if (gzSize > origSize) {
         // gzip is bigger than original, delete gzipped file
         log.warn(file, 'gzipped files is bigger than original. deleting .gz')
@@ -102,24 +88,18 @@ const zip = async () => {
   if (!conf.TASKS.ZIP) {
     return
   }
-    
+
   log('start zipping')
   log.time('zip')
 
-  walk(conf.OUT_DIR, async (err, files) => {
-    if (err) {
-      log.error(err)
-      return
-    }
+  try {
+    const files = await walk(conf.OUT_DIR)
 
-    const promises = files.map(zipFile)
-    try {
-      await Promise.all(promises)
-      log.timeEnd('zip')
-    } catch (e) {
-      throw e
-    }
-  })
+    await Promise.all(files.map(zipFile))
+    log.timeEnd('zip')
+  } catch (e) {
+    throw e
+  }
 }
 
 
