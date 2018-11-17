@@ -27,6 +27,10 @@
   "devDependencies": {
     "@magic/test": "github:magic/test"
   },
+  "files": [
+    "src",
+    "bin.js"
+  ],
   "scripts": {
     "start": "t -p",
     "test": "t",
