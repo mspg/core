@@ -5,7 +5,7 @@ module.exports = html =>
     // replace all whitespaces with one space per whitespace group (\n\t\n === ' ').
     .replace(/\s\s+/gim, ' ')
     // replace whitespaces beween tags or in empty tags with nothing
-    .replace(/>\s\s+</gim, '><')
+    .replace(/>\s+</gim, '><')
     // remove newlines before closing tags
     .replace(/\n<\//gim, '</')
     .trim()
