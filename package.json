@@ -22,7 +22,6 @@
     "@magic/log": "github:magic/log",
     "@magic/types": "github:magic/types",
     "browser-sync": "2.26.3",
-    "chokidar": "2.0.4",
     "node-zopfli-es": "1.0.0"
   },
   "devDependencies": {
