@@ -7,12 +7,12 @@
 
 transforms a src directory into a github hosted gh-pages branch.
 
-###### installation
+##### installation
 ```
 npm i --save mspg/core
 ```
 
-###### usage
+##### usage
 mspg comes as a single executable file.
 ```
 mspg [TASKS]...
@@ -27,7 +27,7 @@ publish - publishes the current HEAD to github/gitlab pages
 help    - this help text
 ```
 
-##### usage examples:
+##### cli usage examples:
 ```
 # production build
 NODE_ENV=production mspg clean build zip 
@@ -36,13 +36,35 @@ NODE_ENV=production mspg clean build zip
 mspg build serve
 ```
 
-###### example app
+##### example app
 a minimal example app is in the [example][example-url] directory of this repository,
 using [config.js][config-url] from the root directory
 
-###### example app on github.io
+##### example app on github.io
 the example app is published to the [gh-pages][gh-pages] branch.
 it is hosted @ [https://mspg.github.io/core][page-url]
+
+##### using html/css/javascript transpilation
+writing transpilers for any kind of toolchain is pretty easy,
+just have a look at the examples below to get started if you want to use another toolchain.
+every transpiler also includes a minimal example project in the example directory.
+
+###### html
+both html toolchains below follow the same rules:
+* every *.html file in the src/ directory is a page and gets transpiled to public/
+* every includes/html/*.extension file is an include file and can be included using /filename.extension
+* every includes/html/*.extension file can also be a template file. using extend you can reuse a html template in both pug and posthtml. 
+
+[pug](https://github.com/mspg/transpile-pug)
+[posthtml](https://github.com/mspg/transpile-posthtml)
+
+###### css
+[stylus](https://github.com/mspg/transpile-stylus)
+postcss - soon
+
+###### js
+[babel](https://github.com/mspg/transpile-babel)
+rollup - soon
 
 [npm-image]: https://img.shields.io/npm/v/@mspg/core.svg
 [npm-url]: https://www.npmjs.com/package/@mspg/core
