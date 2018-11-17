@@ -25,11 +25,11 @@ module.exports = [
     fn: async () => await rmrf(testDirRoot),
     before,
     expect: async () => !(await fs.exists(testDirRoot)),
-    info: 'rmrf deeply deletes directory structures'
+    info: 'rmrf deeply deletes directory structures',
   },
   {
     fn: async () => await rmrf(path.join(__dirname, 'non', 'existent', 'dir')),
     expect: undefined,
-    info: 'rmrf returns undefined if the directory/file does no exist'
-  }
+    info: 'rmrf returns undefined if the directory/file does no exist',
+  },
 ]

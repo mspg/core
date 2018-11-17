@@ -8,6 +8,4 @@ const cssString = `
 `
 const expectedString = '.t,.t2{color:green;}'
 
-module.exports = [
-  { fn: minify(cssString), expect: expectedString, info: 'css gets minified' },
-]
+module.exports = [{ fn: minify(cssString), expect: expectedString, info: 'css gets minified' }]

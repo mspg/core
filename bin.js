@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const hasArgv = () => 
-  process.argv.indexOf('-h') > -1 
-  || process.argv.indexOf('--h') > -1 
-  || process.argv.indexOf('-help') > -1
-  || process.argv.indexOf('--help') > -1
-  || process.argv.indexOf('help') > -1
+const hasArgv = () =>
+  process.argv.indexOf('-h') > -1 ||
+  process.argv.indexOf('--h') > -1 ||
+  process.argv.indexOf('-help') > -1 ||
+  process.argv.indexOf('--help') > -1 ||
+  process.argv.indexOf('help') > -1
 
 if (hasArgv()) {
   console.log(`
