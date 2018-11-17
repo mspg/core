@@ -6,3 +6,6 @@ module.exports = html =>
     .replace(/\s\s+/gim, ' ')
     // replace whitespaces beween tags or in empty tags with nothing
     .replace(/>\s\s+</gim, '><')
+    // remove newlines before closing tags
+    .replace(/\n<\//gim, '</')
+    .trim()

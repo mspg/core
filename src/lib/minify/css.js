@@ -14,3 +14,4 @@ module.exports = style =>
     .replace(/;\s/gim, ';')
     // remove spaces after ,
     .replace(/,\s/gim, ',')
+    .trim()
