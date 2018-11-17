@@ -100,7 +100,9 @@ const getFiles = async (dirs = [process.cwd()]) => {
       const stat = await fs.stat(name)
 
       if (stat.isFile()) {
-        files[name] = stat.mtime.getTime()
+        files[name] = {
+          time: stat.mtime.getTime(),
+        }
       } else if (stat.isDirectory()) {
         const f = await fs.readdir(name)
         const addFiles = await getFiles(f.map(file => path.join(name, file)))
@@ -112,42 +114,53 @@ const getFiles = async (dirs = [process.cwd()]) => {
   return files
 }
 
-const watchedFiles = {
-  bundle: [],
-  includes: [],
+let watchedFiles = []
+
+const hasFileChanged = ([k, t]) => t.time > watchedFiles[k].time
+
+const getChangedFiles = files => {
+  try {
+    let changedFiles = []
+    if (is.empty(watchedFiles)) {
+      changedFiles = Object.keys(files)
+    } else {
+      changedFiles = Object.entries(files)
+        .filter(hasFileChanged)
+        .map(([k]) => k)
+    }
+
+    return changedFiles
+  } catch (e) {
+    throw e
+  }
 }
 
-const hasFileChanged = ([k, t]) => t > watchedFiles.bundle[k]
+const maybeWriteFile = async name => {
+  const { buffer, out } = await getFileContent({ name })
+
+  const bundle = await transpileFile({ name, buffer })
+  if (bundle) {
+    const minified = await minifyFile({ name, bundle })
+    await write({ buffer, bundle: minified, out })
+    watchedFiles[name].content = minified
+    return minified
+  }
+}
 
 const watch = async () => {
   const files = await getFiles(conf.BUNDLE_DIR)
+  const changedFiles = getChangedFiles(files)
+  // setting watchedFiles after getting the changedFiles
+  // leads to the first run building at all times, do not change the order pls.
+  watchedFiles = files
 
-  let changedFiles = []
-  if (is.empty(watchedFiles.bundle)) {
-    changedFiles = Object.keys(files)
-  } else {
-    changedFiles = Object.entries(files)
-      .filter(hasFileChanged)
-      .map(([k]) => k)
-  }
-
-  // watchedFiles.includes = includes
-  watchedFiles.bundle = files
-
-  await Promise.all(
-    changedFiles.map(async name => {
-      const { buffer, out } = await getFileContent({ name })
-      const bundle = await transpileFile({ name, buffer })
-      if (bundle) {
-        const minified = await minifyFile({ name, bundle })
-        await write({ buffer, bundle: minified, out })
-      }
-    }),
-  )
+  await Promise.all(changedFiles.map(maybeWriteFile))
 
   if (conf.WATCH) {
     setTimeout(watch, 300)
   }
+
+  return watchedFiles
 }
 
 const build = async () => {
@@ -160,10 +173,10 @@ const build = async () => {
 
   // actually run the task:
   try {
-    await watch()
+    const files = await watch()
 
     if (conf.SERVE) {
-      serve()
+      serve(files)
     }
   } catch (e) {
     throw e
