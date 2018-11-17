@@ -36,8 +36,8 @@
     "test": "t",
     "build": "NODE_ENV=production ./bin.js build zip",
     "dev": "./bin.js build serve watch",
-    "format": "f",
-    "format:fix": "f -w",
+    "format": "f -w",
+    "format:check": "f",
     "calls": "calls",
     "connect": "NODE_ENV=production ./bin.js connect",
     "publish": "NODE_ENV=production ./bin.js build zip publish"
