@@ -16,10 +16,9 @@ const publish = async () => {
   log('start publish')
   log.time('publish')
 
-  
   try {
     const outDir = OUT_DIR.replace(`${process.cwd()}/`, '')
-  
+
     const cmdPrefix = `--prefix=${outDir}`
     const cmdOnto = `--onto=${GIT_ORIGIN}/${GIT_BRANCH}`
     const cmdArgv = `${cmdPrefix} ${cmdOnto}`

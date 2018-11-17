@@ -18,17 +18,19 @@ const walk = async (dir, done) => {
     let results = []
     const list = await fs.readdir(dir)
 
-    await Promise.all(list.map(async file => {
-      file = path.resolve(dir, file)
-      const stat = await fs.stat(file)
+    await Promise.all(
+      list.map(async file => {
+        file = path.resolve(dir, file)
+        const stat = await fs.stat(file)
 
-      if (stat.isDirectory()) {
-        const res = await walk(file)
-        results = results.concat(res)
-      } else if (stat.isFile()) {
-        results.push(file)
-      }
-    }))
+        if (stat.isDirectory()) {
+          const res = await walk(file)
+          results = results.concat(res)
+        } else if (stat.isFile()) {
+          results.push(file)
+        }
+      }),
+    )
 
     return results
   } catch (e) {
@@ -72,7 +74,9 @@ const zipFile = file => {
     readStream.on('error', reject)
     writeStream.on('error', reject)
     writeStream.on('close', async () => {
-      const [gzSize, origSize] = await Promise.all([gzFileName, file].map(async f => await fs.stat(f).size))
+      const [gzSize, origSize] = await Promise.all(
+        [gzFileName, file].map(async f => await fs.stat(f).size),
+      )
       if (gzSize > origSize) {
         // gzip is bigger than original, delete gzipped file
         log.warn(file, 'gzipped files is bigger than original. deleting .gz')
@@ -101,6 +105,5 @@ const zip = async () => {
     throw e
   }
 }
-
 
 module.exports = zip

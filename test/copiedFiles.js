@@ -5,11 +5,7 @@ const cwd = process.cwd()
 const srcDir = path.join(cwd, 'example', 'src')
 const publicDir = path.join(cwd, 'example', 'public')
 
-const files = [
-  'index.html',
-  'main.css',
-  'main.js',
-]
+const files = ['index.html', 'main.css', 'main.js']
 
 const read = (p, f) => fs.readFileSync(path.join(p, f))
 

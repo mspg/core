@@ -76,21 +76,23 @@ const getFiles = async (dirs = [process.cwd()]) => {
 
   const files = {}
 
-  await Promise.all(dirs.map(async name => {
-    if (!await fs.exists(name)) {
-      return
-    }
+  await Promise.all(
+    dirs.map(async name => {
+      if (!(await fs.exists(name))) {
+        return
+      }
 
-    const stat = await fs.stat(name)
+      const stat = await fs.stat(name)
 
-    if (stat.isFile()) {
-      files[name] = stat.mtime.getTime()
-    } else if (stat.isDirectory()) {
-      const f = await fs.readdir(name)
-      const addFiles = await getFiles(f.map(file => path.join(name, file)))
-      Object.assign(files, addFiles)
-    }
-  }))
+      if (stat.isFile()) {
+        files[name] = stat.mtime.getTime()
+      } else if (stat.isDirectory()) {
+        const f = await fs.readdir(name)
+        const addFiles = await getFiles(f.map(file => path.join(name, file)))
+        Object.assign(files, addFiles)
+      }
+    }),
+  )
 
   return files
 }
@@ -117,13 +119,15 @@ const watch = async () => {
   // watchedFiles.includes = includes
   watchedFiles.bundle = files
 
-  await Promise.all(changedFiles.map(async name => {
-    const { buffer, out } = await getFileContent({ name })
-    const bundle = await transpileFile({ name, buffer })
-    if (bundle) {
-      await write({ buffer, bundle, out })
-    }
-  }))
+  await Promise.all(
+    changedFiles.map(async name => {
+      const { buffer, out } = await getFileContent({ name })
+      const bundle = await transpileFile({ name, buffer })
+      if (bundle) {
+        await write({ buffer, bundle, out })
+      }
+    }),
+  )
 
   if (conf.WATCH) {
     setTimeout(watch, 300)
@@ -145,7 +149,6 @@ const build = async () => {
     if (conf.SERVE) {
       serve()
     }
-
   } catch (e) {
     throw e
   }

@@ -11,10 +11,10 @@ const clean = async () => {
 
   log('clean start', OUT_DIR)
   log.time('clean')
-  
+
   try {
     await fs.rmrf(OUT_DIR)
-  } catch(e) {
+  } catch (e) {
     throw e
   }
 

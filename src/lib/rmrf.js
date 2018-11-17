@@ -10,7 +10,7 @@ const fs = {
   exists: util.promisify(xfs.exists),
 }
 
-const rmrf = async (dir) => {
+const rmrf = async dir => {
   try {
     if (!dir) {
       throw new Error('rmrf: expecting a string argument.')
@@ -30,7 +30,7 @@ const rmrf = async (dir) => {
 
       await fs.rmdir(dir)
     }
-  } catch(e) {
+  } catch (e) {
     throw e
   }
 }

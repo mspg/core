@@ -8,6 +8,6 @@ module.exports = [
   {
     fn: () => config.CWD,
     expect: localConfig.CWD,
-    info: 'config.CWD equals the cwd in the cwd/config.js file'
+    info: 'config.CWD equals the cwd in the cwd/config.js file',
   },
 ]

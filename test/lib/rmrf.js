@@ -21,5 +21,9 @@ const before = async () => {
 
 module.exports = [
   { fn: tryCatch(rmrf), expect: is.error, info: 'rmrf expects an argument' },
-  { fn: async () => await rmrf(testDirRoot), before, expect: async () => !await fs.exists(testDirRoot) },
+  {
+    fn: async () => await rmrf(testDirRoot),
+    before,
+    expect: async () => !(await fs.exists(testDirRoot)),
+  },
 ]

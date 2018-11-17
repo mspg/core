@@ -3,7 +3,7 @@ const tasks = require('./tasks')
 const run = async () => {
   try {
     await tasks.connect()
-    
+
     await tasks.clean()
     await tasks.build()
 
