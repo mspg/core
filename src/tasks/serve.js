@@ -1,5 +1,5 @@
 const util = require('util')
-const nfs = require('fs')
+const fs = require('../lib/fs')
 const path = require('path')
 
 const is = require('@magic/types')
@@ -12,20 +12,11 @@ const cleanFileName = ([file]) => file.replace(conf.BUNDLE_DIR, '')
 
 const http = require('http')
 
-const fs = {
-  exists: util.promisify(nfs.exists),
-  createReadStream: nfs.createReadStream,
-  readdir: util.promisify(nfs.readdir),
-}
-
-const routeExists = (r, routes) => 
-  routes
-    .map(cleanFileName)
-    .indexOf(r) > - 1
+const routeExists = (r, routes) => routes.map(cleanFileName).indexOf(r) > -1
 
 const resolveUrl = async req => {
   const file = path.join(conf.OUT_DIR, req.url)
-  
+
   if (path.resolve(file) === path.resolve(conf.OUT_DIR)) {
     //index.html
     return path.join(conf.OUT_DIR, 'index.html')
@@ -55,7 +46,7 @@ const handler = async (req, res) => {
   try {
     let filePath = await resolveUrl(req)
 
-    const file404 = path.join(conf.OUT_DIR, '404.html') 
+    const file404 = path.join(conf.OUT_DIR, '404.html')
     if (!filePath) {
       if (await fs.exists(file404)) {
         filePath = file404

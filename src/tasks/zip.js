@@ -1,17 +1,12 @@
-const nfs = require('fs')
 const path = require('path')
-const util = require('util')
+
+const fs = require('../lib/fs')
 
 const zopfli = require('node-zopfli-es')
 
 const log = require('@magic/log')
 
 const conf = require('../config')
-
-const fs = {
-  readdir: util.promisify(nfs.readdir),
-  stat: util.promisify(nfs.stat),
-}
 
 const walk = async (dir, done) => {
   try {
@@ -64,9 +59,9 @@ const zipFile = file => {
       blocksplittingmax: 15,
     }
     const zopferl = zopfli.createGzip(options)
-    const writeStream = nfs.createWriteStream(gzFileName)
+    const writeStream = fs.createWriteStream(gzFileName)
 
-    const readStream = nfs
+    const readStream = fs
       .createReadStream(file)
       .pipe(zopferl)
       .pipe(writeStream)
@@ -80,7 +75,7 @@ const zipFile = file => {
       if (gzSize > origSize) {
         // gzip is bigger than original, delete gzipped file
         log.warn(file, 'gzipped files is bigger than original. deleting .gz')
-        fs.unlinkSync(gzFileName)
+        await fs.rmrf(gzFileName)
       }
       resolve()
     })
