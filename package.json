@@ -21,7 +21,6 @@
   "dependencies": {
     "@magic/log": "github:magic/log",
     "@magic/types": "github:magic/types",
-    "browser-sync": "2.26.3",
     "node-zopfli-es": "1.0.0"
   },
   "devDependencies": {

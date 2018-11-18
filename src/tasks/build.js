@@ -5,8 +5,11 @@ const log = require('@magic/log')
 
 const serve = require('./serve')
 const fs = require('../lib/fs')
+const getFileType = require('../lib/getFileType')
 
 const conf = require('../config')
+
+let watchedFiles = {}
 
 const getFileContent = async file => {
   const { name } = file
@@ -22,11 +25,6 @@ const getFileContent = async file => {
   }
 }
 
-const getFileType = name => {
-  const typeArray = name.split('.')
-  const fileType = typeArray[typeArray.length - 1]
-  return fileType
-}
 
 const transpileFile = async file => {
   const { name, buffer } = file
@@ -66,8 +64,10 @@ const write = async file => {
   const { buffer, bundle, out } = file
 
   // no changes, resolve
-  if (fileCache[out] && fileCache[out].content === buffer) {
-    return file
+  if (fileCache[out]) {
+    if (fileCache[out].buffer.toString() === buffer.toString()) {
+      return file
+    }
   }
 
   // write file to "cache"
@@ -114,43 +114,41 @@ const getFiles = async (dirs = [process.cwd()]) => {
   return files
 }
 
-let watchedFiles = []
-
 const hasFileChanged = ([k, t]) => t.time > watchedFiles[k].time
 
 const getChangedFiles = files => {
-  try {
-    let changedFiles = []
-    if (is.empty(watchedFiles)) {
-      changedFiles = Object.keys(files)
-    } else {
-      changedFiles = Object.entries(files)
-        .filter(hasFileChanged)
-        .map(([k]) => k)
-    }
-
-    return changedFiles
-  } catch (e) {
-    throw e
+  let changedFiles = []
+  if (is.empty(watchedFiles)) {
+    changedFiles = Object.keys(files)
+  } else {
+    changedFiles = Object.entries(files)
+      .filter(hasFileChanged)
+      .map(([k]) => k)
   }
+
+  return changedFiles
 }
 
 const maybeWriteFile = async name => {
-  const { buffer, out } = await getFileContent({ name })
+  try {
+    const { buffer, out } = await getFileContent({ name })
 
-  const bundle = await transpileFile({ name, buffer })
-  if (bundle) {
-    const minified = await minifyFile({ name, bundle })
-    await write({ buffer, bundle: minified, out })
-    watchedFiles[name].content = minified
-    return minified
+    const bundle = await transpileFile({ name, buffer })
+    if (bundle) {
+      const minified = await minifyFile({ name, bundle })
+      await write({ buffer, bundle: minified, out })
+      watchedFiles[name].content = minified
+      return minified
+    } 
+  } catch (e) {
+    throw e
   }
 }
 
 const watch = async () => {
   const files = await getFiles(conf.BUNDLE_DIR)
   const changedFiles = getChangedFiles(files)
-  // setting watchedFiles after getting the changedFiles
+  // setting cache after getting the changedFiles
   // leads to the first run building at all times, do not change the order pls.
   watchedFiles = files
 
@@ -159,8 +157,6 @@ const watch = async () => {
   if (conf.WATCH) {
     setTimeout(watch, 300)
   }
-
-  return watchedFiles
 }
 
 const build = async () => {
@@ -173,10 +169,10 @@ const build = async () => {
 
   // actually run the task:
   try {
-    const files = await watch()
+    await watch()
 
     if (conf.SERVE) {
-      serve(files)
+      serve()
     }
   } catch (e) {
     throw e
