@@ -12,7 +12,7 @@ const mkdirP = async p => {
 
   try {
     const dir = path.dirname(p)
-    if (!await fs.exists(dir)) {
+    if (!(await fs.exists(dir))) {
       await mkdirP(dir)
     }
     await fs.mkdir(p)

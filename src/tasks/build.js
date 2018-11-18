@@ -25,7 +25,6 @@ const getFileContent = async file => {
   }
 }
 
-
 const transpileFile = async file => {
   const { name, buffer } = file
   const type = getFileType(name)
@@ -139,7 +138,7 @@ const maybeWriteFile = async name => {
       await write({ buffer, bundle: minified, out })
       watchedFiles[name].content = minified
       return minified
-    } 
+    }
   } catch (e) {
     throw e
   }
