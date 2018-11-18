@@ -1,5 +1,4 @@
 const util = require('util')
-const browserSync = require('browser-sync')
 const nfs = require('fs')
 const path = require('path')
 
