@@ -39,7 +39,7 @@ const htmlZipFileExists = async () => await fs.exists(htmlZipFile)
 const cssExampleFile = path.join(publicDir, 'main.css')
 const cssFileExists = async () => await fs.exists(cssExampleFile)
 const cssFileContents = async () => await fs.readFile(cssExampleFile, 'utf8')
-const cssFileTest = s => s.indexOf('050505') > -1
+const cssFileTest = '.green{color:green;}'
 
 const cssZipFile = path.join(publicDir, 'main.css.gz')
 const cssZipFileExists = async () => await fs.exists(cssZipFile)
@@ -56,7 +56,9 @@ const imgFileIsEqual = async () => {
 const jsExampleFile = path.join(publicDir, 'main.js')
 const jsFileExists = async () => await fs.exists(jsExampleFile)
 const jsFileContents = async () => await fs.readFile(jsExampleFile, 'utf8')
-const jsFileTest = s => s.indexOf("console.log('hi')") > -1
+
+const jsSrcFile = path.join(srcDir, 'main.js')
+const jsFileTest = async () => await fs.readFile(jsSrcFile)
 
 const jsZipFile = path.join(publicDir, 'main.js.gz')
 const jsZipFileExists = async () => await fs.exists(jsZipFile)
