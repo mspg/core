@@ -12,8 +12,6 @@ const cleanFileName = ([file]) => file.replace(conf.BUNDLE_DIR, '')
 
 const http = require('http')
 
-const routeExists = (r, routes) => routes.map(cleanFileName).indexOf(r) > -1
-
 const resolveUrl = async req => {
   const file = path.join(conf.OUT_DIR, req.url)
 
@@ -54,7 +52,6 @@ const handler = async (req, res) => {
     }
 
     if (filePath) {
-      console.log(filePath)
       res.writeHead(200, getContentType(req))
       const stream = fs.createReadStream(filePath)
       stream.on('open', () => stream.pipe(res))
