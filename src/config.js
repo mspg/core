@@ -38,7 +38,7 @@ config.LINT = {
 }
 
 config.TASKS = {
-  CLEAN: argv.includes('clean') || config.ENV === 'production',
+  CLEAN: argv.includes('clean') || (config.ENV === 'production' && argv.includes('build')),
   BUILD: argv.includes('build'),
   LINT: argv.includes('lint'),
   PUBLISH: argv.includes('publish'),
