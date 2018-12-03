@@ -33,8 +33,8 @@ const LINT = config.LINT || {
 }
 
 config.LINT = {
-  HTML: LINT.HTML || argv.includes('lint') && argv.includes('html'),
-  CSS: LINT.CSS || argv.includes('lint') && argv.includes('css'),
+  HTML: typeof LINT.HTML !== 'undefined' ? LINT.HTML : argv.includes('lint') && argv.includes('html'),
+  CSS: typeof LINT.CSS !== 'undefined' ? LINT.CSS : argv.includes('lint') && argv.includes('css'),
 }
 
 config.TASKS = {
