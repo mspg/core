@@ -32,8 +32,8 @@ help    - this help text
 # production build
 NODE_ENV=production mspg clean build zip 
   
-# development (build files and serve them on 3000)
-mspg build serve
+# development (build files, watch for changes, and serve them on localhost:3000)
+mspg build serve watch
 ```
 
 ##### example app
