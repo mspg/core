@@ -5,4 +5,5 @@ module.exports = {
   CWD: path.join(__dirname, 'example'),
   // and published in example/publish
   OUT_DIR: path.join(__dirname, 'example', 'public'),
+  WEB_ROOT: '/core',
 }
