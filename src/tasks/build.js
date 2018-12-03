@@ -36,7 +36,7 @@ const transpileFile = async file => {
   if (!is.empty(conf.TRANSPILERS)) {
     const transpiler = conf.TRANSPILERS[type.toUpperCase()]
     if (is.function(transpiler)) {
-      const bundler = Object.assign({ buffer, config: conf }, file)
+      const bundler = { buffer, config: conf , ...file }
       return await transpiler(bundler)
     }
   }
@@ -50,7 +50,7 @@ const minifyFile = file => {
   const type = getFileType(name)
   const minifier = conf.MINIFY[type.toUpperCase()]
   if (is.function(minifier)) {
-    const minified = minifier(bundle.toString())
+    const minified = minifier(bundle.toString(), conf)
     return minified
   }
 

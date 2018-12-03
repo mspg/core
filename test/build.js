@@ -15,7 +15,7 @@ const fs = {
 
 const beforeAll = async () => {
   try {
-    const cmd = 'mspg clean build zip'
+    const cmd = 'NODE_ENV=production mspg clean build zip'
     await xc(cmd)
   } catch (e) {
     throw e
@@ -39,7 +39,7 @@ const htmlZipFileExists = async () => await fs.exists(htmlZipFile)
 const cssExampleFile = path.join(publicDir, 'main.css')
 const cssFileExists = async () => await fs.exists(cssExampleFile)
 const cssFileContents = async () => await fs.readFile(cssExampleFile, 'utf8')
-const cssFileTest = '.green{color:green;}'
+const cssFileTest = '.red{color:red;} .green{color:green;}'
 
 const cssZipFile = path.join(publicDir, 'main.css.gz')
 const cssZipFileExists = async () => await fs.exists(cssZipFile)
