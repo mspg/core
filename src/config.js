@@ -27,9 +27,10 @@ config.GIT_BRANCH = 'gh-pages'
 config.IGNORE_EXTENSIONS = []
 config.VERBOSE = argv.indexOf('verbose') > -1
 
-config.LINT = {
-  HTML: argv.indexOf('html') > -1,
-  CSS: argv.indexOf('css') > -1,
+const LINT = {
+  HTML: argv.includes('lint') && argv.includes('html'),
+  CSS: argv.includes('lint') && argv.includes('css'),
+  ...config.LINT,
 }
 
 config.TASKS = {
