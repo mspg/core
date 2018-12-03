@@ -6,7 +6,7 @@ const { exec } = require('child_process')
 const log = require('@magic/log')
 
 const conf = require('../config')
-const { TASKS, GIT_ORIGIN, GIT_BRANCH, OUT_DIR, CWD } = conf
+const { TASKS, GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
 
 const xc = util.promisify(exec)
 
@@ -28,7 +28,7 @@ const connect = async () => {
   log('exec', cmd)
 
   try {
-    const { stdout } = await xc(cmd)
+    await xc(cmd)
   } catch (e) {
     throw e
   }
