@@ -34,11 +34,15 @@ config.TASKS = {
   PUBLISH: argv.includes('publish'),
   ZIP: argv.includes('zip'),
   CONNECT: argv.includes('connect'),
+  SERVE: argv.includes('serve'),
 }
 
 config.MINIFY = {
   HTML: require('./lib/minify/html'),
   CSS: require('./lib/minify/css'),
 }
+
+const WEB_ROOT = config.WEB_ROOT || '/'
+config.WEB_ROOT = config.ENV === 'production' ? WEB_ROOT : '/'
 
 module.exports = config
