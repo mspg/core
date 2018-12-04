@@ -6,5 +6,6 @@ module.exports = {
   // and published in example/publish
   OUT_DIR: path.join(__dirname, 'example', 'public'),
   // root of the homepage, useful if you are using username.github.io/repo style urls.
+  // trailing slash gets added if missing
   WEB_ROOT: '/core',
 }
