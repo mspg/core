@@ -5,13 +5,13 @@ const { getContentType, contentTypes } = require('../../../src/lib/fs')
 module.exports = [
   {
     fn: Object.entries(contentTypes).filter(
-      ([ext, type]) => type !== getContentType({ url: `file.${ext}` }),
+      ([ext, type]) => type !== getContentType(`file.${ext}`),
     ),
     expect: is.empty,
     info: 'getContentType handles all defined contentTypes correctly',
   },
   {
-    fn: getContentType({ url: 'file.unknown' }),
+    fn: getContentType('file.unknown'),
     expect: 'text/plain',
     info: 'unknown content returns text/plain',
   },

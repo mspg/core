@@ -1,8 +1,8 @@
 const getFileType = require('./getFileType')
 const contentTypes = require('./contentTypes')
 
-const getContentType = req => {
-  const fileType = getFileType(req.url)
+const getContentType = uri => {
+  const fileType = getFileType(uri)
   let contentType = 'text/plain'
   if (contentTypes[fileType]) {
     contentType = contentTypes[fileType]

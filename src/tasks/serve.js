@@ -46,7 +46,7 @@ const handler = async (req, res) => {
     }
 
     if (filePath) {
-      res.writeHead(200, fs.getContentType(req))
+      res.writeHead(200, fs.getContentType(req.url))
       const stream = fs.createReadStream(filePath)
       stream.on('open', () => stream.pipe(res))
       stream.on('error', err => res.end(err.toString()))
