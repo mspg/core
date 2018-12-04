@@ -18,6 +18,7 @@ module.exports = {
   ogg: 'audio/ogg',
   csv: 'text/csv',
   text: 'text/plain',
+  txt: 'text/plain',
   png: 'image/png',
   jpeg: 'image/jpeg',
   jpg: 'image/jpg',
