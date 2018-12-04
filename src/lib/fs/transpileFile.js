@@ -1,15 +1,15 @@
 const is = require('@magic/types')
 const getFileType = require('./getFileType')
-
+const addTrailingSlash = require('../addTrailingSlash')
 const conf = require('../../config')
 
 const transpileHTML = html =>
   html
     .replace(/{{ /gi, '{{')
     .replace(/ }}/gi, '}}')
-    .replace(/{{WEB_ROOT}}/gi, conf.WEB_ROOT)
+    .replace(/{{WEB_ROOT}}/gi, addTrailingSlash(conf.WEB_ROOT))
 
-const transpileFile = async (file) => {
+const transpileFile = async file => {
   let { name, buffer } = file
   const type = getFileType(name)
   if (conf.IGNORE_EXTENSIONS.indexOf(type) > -1) {
