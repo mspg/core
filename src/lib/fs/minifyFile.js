@@ -1,7 +1,9 @@
 const is = require('@magic/types')
 const getFileType = require('./getFileType')
 
-const minifyFile = (file, conf) => {
+const conf = require('../../config')
+
+const minifyFile = file => {
   const { name, bundle } = file
   const type = getFileType(name)
   const minifier = conf.MINIFY && conf.MINIFY[type.toUpperCase()]

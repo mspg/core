@@ -3,13 +3,15 @@ const transpileFile = require('./transpileFile')
 const minifyFile = require('./minifyFile')
 const write = require('./write')
 
-const maybeWriteFile = (watchedFiles, conf) => async name => {
-  try {
-    const { buffer, out } = await getFileContent({ name }, conf)
+const conf = require('../../config')
 
-    const bundle = await transpileFile({ name, buffer }, conf)
+const maybeWriteFile = watchedFiles => async name => {
+  try {
+    const { buffer, out } = await getFileContent({ name })
+
+    const bundle = await transpileFile({ name, buffer })
     if (bundle) {
-      const minified = await minifyFile({ name, bundle }, conf)
+      const minified = await minifyFile({ name, bundle })
       await write({ buffer, bundle: minified, out })
       watchedFiles[name].content = minified
       return minified

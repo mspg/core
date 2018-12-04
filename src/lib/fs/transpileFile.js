@@ -1,8 +1,10 @@
 const is = require('@magic/types')
 const getFileType = require('./getFileType')
 
-const transpileFile = async (file, conf) => {
-  const { name, buffer } = file
+const conf = require('../../config')
+
+const transpileFile = async (file) => {
+  let { name, buffer } = file
   const type = getFileType(name)
   if (conf.IGNORE_EXTENSIONS.indexOf(type) > -1) {
     log.info('File ignored by extension', name)
