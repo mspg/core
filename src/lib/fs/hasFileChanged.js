@@ -1,4 +1,4 @@
-const hasFileChanged = watchedFiles => ([k, t]) =>
-  t && watchedFiles[k] && t.time > watchedFiles[k].time
+const hasFileChanged = (watched, file) =>
+  !watched || !watched.time || file.time > watched.time
 
 module.exports = hasFileChanged
