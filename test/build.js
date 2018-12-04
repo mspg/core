@@ -4,14 +4,9 @@
 const util = require('util')
 const path = require('path')
 const { exec } = require('child_process')
-const nfs = require('fs')
 
 const xc = util.promisify(exec)
-const fs = {
-  readFile: util.promisify(nfs.readFile),
-  exists: util.promisify(nfs.exists),
-  stat: util.promisify(nfs.stat),
-}
+const fs = require('../src/lib/fs')
 
 const beforeAll = async () => {
   try {

@@ -1,6 +1,5 @@
 const path = require('path')
-const fs = require('../../src/lib/fs')
-const util = require('util')
+const fs = require('../../../src/lib/fs')
 
 const { is, tryCatch } = require('@magic/test')
 

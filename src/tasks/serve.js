@@ -2,13 +2,7 @@ const util = require('util')
 const fs = require('../lib/fs')
 const path = require('path')
 
-const is = require('@magic/types')
-const log = require('@magic/log')
-
 const conf = require('../config')
-const getContentType = require('../lib/getContentType')
-
-const cleanFileName = ([file]) => file.replace(conf.BUNDLE_DIR, '')
 
 const http = require('http')
 
@@ -52,7 +46,7 @@ const handler = async (req, res) => {
     }
 
     if (filePath) {
-      res.writeHead(200, getContentType(req))
+      res.writeHead(200, fs.getContentType(req))
       const stream = fs.createReadStream(filePath)
       stream.on('open', () => stream.pipe(res))
       stream.on('error', err => res.end(err.toString()))

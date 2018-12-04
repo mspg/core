@@ -1,10 +1,8 @@
 const path = require('path')
-const nfs = require('fs')
-const util = require('util')
 
 const { is, tryCatch } = require('@magic/test')
 
-const fs = require('../../src/lib/fs')
+const fs = require('../../../src/lib/fs')
 
 const testDirRoot = path.join(__dirname, 'rmrf')
 const testDir = path.join(testDirRoot, 'deep', 'deeper')

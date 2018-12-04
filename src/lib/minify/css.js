@@ -25,10 +25,7 @@ module.exports = (style, config = { OUT_DIR: process.cwd() }) => {
   }
 
   const OUT_DIR = config.OUT_DIR || process.cwd()
-  const content = [
-    path.join(OUT_DIR, '**/*.js'), 
-    path.join(OUT_DIR, '**/*.html')
-  ]
+  const content = [path.join(OUT_DIR, '**/*.js'), path.join(OUT_DIR, '**/*.html')]
 
   const purified = purify(content, style)
 

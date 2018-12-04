@@ -14,4 +14,6 @@ const config = {
   OUT_DIR: path.join(process.cwd(), 'example', 'public'),
 }
 
-module.exports = [{ fn: minify(cssString, config), expect: expectedString, info: 'css gets minified' }]
+module.exports = [
+  { fn: minify(cssString, config), expect: expectedString, info: 'css gets minified' },
+]

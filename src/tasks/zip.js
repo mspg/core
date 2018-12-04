@@ -1,11 +1,9 @@
 const path = require('path')
 
-const fs = require('../lib/fs')
-
 const zopfli = require('node-zopfli-es')
-
 const log = require('@magic/log')
 
+const fs = require('../lib/fs')
 const conf = require('../config')
 
 const walk = async (dir, done) => {
