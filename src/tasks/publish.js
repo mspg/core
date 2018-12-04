@@ -1,12 +1,8 @@
-const util = require('util')
-const { exec } = require('child_process')
-
 const log = require('@magic/log')
 
+const xc = require('../lib/xc')
 const conf = require('../config')
 const { TASKS, GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
-
-const xc = util.promisify(exec)
 
 const publish = async () => {
   if (!TASKS.PUBLISH) {
