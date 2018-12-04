@@ -7,7 +7,7 @@ const run = async () => {
     await tasks.clean()
     await tasks.build()
 
-    // disable until it is using csslint and htmllint instead of puglint and stylint
+    // disable until using csslint and htmllint instead of puglint and stylint
     // await tasks.lint()
 
     await tasks.zip()
