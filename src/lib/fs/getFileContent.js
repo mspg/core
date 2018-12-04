@@ -2,7 +2,7 @@ const fs = require('./fs')
 
 const conf = require('../../config')
 
-const getFileContent = async (file) => {
+const getFileContent = async file => {
   const { name } = file
 
   const buffer = await fs.readFile(name)
