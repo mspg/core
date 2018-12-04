@@ -27,16 +27,6 @@ config.GIT_BRANCH = 'gh-pages'
 config.IGNORE_EXTENSIONS = []
 config.VERBOSE = argv.includes('verbose')
 
-const LINT = config.LINT || { 
-  HTML: false,
-  CSS: false,
-}
-
-config.LINT = {
-  HTML: typeof LINT.HTML !== 'undefined' ? LINT.HTML : argv.includes('lint') && argv.includes('html'),
-  CSS: typeof LINT.CSS !== 'undefined' ? LINT.CSS : argv.includes('lint') && argv.includes('css'),
-}
-
 config.TASKS = {
   CLEAN: argv.includes('clean') || (config.ENV === 'production' && argv.includes('build')),
   BUILD: argv.includes('build'),
