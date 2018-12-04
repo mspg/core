@@ -14,7 +14,8 @@ const watch = async () => {
   const files = await fs.getFiles(conf.BUNDLE_DIR)
   const changedFiles = fs.getChangedFiles(watchedFiles, files)
   // setting cache after getting the changedFiles
-  // leads to the first run building at all times, do not change the order pls.
+  // leads to the first run building at all times,
+  // do not change the order.
   watchedFiles = files
 
   await Promise.all(changedFiles.map(fs.maybeWriteFile(watchedFiles, conf)))
@@ -25,25 +26,29 @@ const watch = async () => {
 }
 
 const build = async () => {
-  if (!conf.TASKS.BUILD) {
+  if (!conf.TASKS.BUILD && !conf.TASKS.SERVE) {
     return
   }
 
-  log('start build')
-  log.time('build')
-
   // actually run the task:
   try {
-    await watch()
+    if (conf.TASKS.BUILD) {
+      log('start build')
+      log.time('build')
+      await watch()
+    }
 
-    if (conf.SERVE) {
+    if (conf.TASKS.SERVE) {
+      log.info('serve')
       serve()
     }
   } catch (e) {
     throw e
   }
 
-  log.timeEnd('build')
+  if (conf.TASKS.BUILD) {
+    log.timeEnd('build')
+  }
 }
 
 module.exports = build
