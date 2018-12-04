@@ -3,9 +3,8 @@
 
 const util = require('util')
 const path = require('path')
-const { exec } = require('child_process')
 
-const xc = util.promisify(exec)
+const xc = require('../src/lib/xc')
 const fs = require('../src/lib/fs')
 
 const beforeAll = async () => {
