@@ -6,7 +6,7 @@ const write = async file => {
 
   // no changes, resolve
   if (fileCache[out]) {
-    if (fileCache[out].buffer.toString() === buffer.toString()) {
+    if (fileCache[out].buffer === buffer) {
       return file
     }
   }

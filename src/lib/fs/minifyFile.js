@@ -8,7 +8,7 @@ const minifyFile = file => {
   const type = getFileType(name)
   const minifier = conf.MINIFY && conf.MINIFY[type.toUpperCase()]
   if (is.function(minifier)) {
-    const minified = minifier(bundle.toString(), conf)
+    const minified = minifier(bundle, conf)
     return minified
   }
 
