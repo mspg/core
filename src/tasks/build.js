@@ -18,7 +18,7 @@ const watch = async () => {
   // do not change the order.
   watchedFiles = files
 
-  await Promise.all(changedFiles.map(fs.maybeWriteFile(watchedFiles, conf)))
+  await Promise.all(changedFiles.map(fs.maybeWriteFile(watchedFiles)))
 
   if (conf.WATCH) {
     setTimeout(watch, 300)
