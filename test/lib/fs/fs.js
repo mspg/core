@@ -24,6 +24,10 @@ const types = {
   minifyFile: is.fn,
   maybeWriteFile: is.fn,
   write: is.fn,
+  rmdir: is.fn,
+  rmDir: is.fn,
+  unlink: is.fn,
+  rm: is.fn,
 }
 
 module.exports = [
@@ -31,7 +35,7 @@ module.exports = [
   {
     fn: () => Object.entries(fs).filter(([k, v]) => !types[k](v)),
     expect: is.empty,
-    info: 'all values of fs are functions',
+    info: 'all values of fs are correct type',
   },
   {
     fn: () => fs.exists,

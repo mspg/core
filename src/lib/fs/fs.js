@@ -1,5 +1,8 @@
+const is = require('@magic/types')
 const fso = require('fs')
 const util = require('util')
+
+const rmdir = util.promisify(fso.rmdir)
 
 const fs = {
   exists: util.promisify(fso.exists),
@@ -10,6 +13,9 @@ const fs = {
   writeFile: util.promisify(fso.writeFile),
   createReadStream: fso.createReadStream,
   createWriteStream: fso.createWriteStream,
+  rmDir: rmdir,
+  rmdir,
+  unlink: util.promisify(fso.unlink),
 }
 
 module.exports = fs

@@ -15,4 +15,5 @@ module.exports = {
   minifyFile: require('./minifyFile'),
   maybeWriteFile: require('./maybeWriteFile'),
   write: require('./write'),
+  rm: require('./rm'),
 }

@@ -13,4 +13,9 @@ module.exports = [
     expect: 'unknown',
     info: 'unknown content returns extension',
   },
+  {
+    fn: getFileType('file'),
+    expect: 'txt',
+    info: 'file without extension are txt files',
+  },
 ]
