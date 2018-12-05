@@ -3,8 +3,6 @@ const transpileFile = require('./transpileFile')
 const minifyFile = require('./minifyFile')
 const write = require('./write')
 
-const conf = require('../../config')
-
 const maybeWriteFile = watchedFiles => async name => {
   try {
     const { buffer, out } = await getFileContent({ name })
