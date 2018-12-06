@@ -12,7 +12,7 @@ const watch = async () => {
   const files = await fs.getFiles([conf.BUNDLE_DIR, conf.INCLUDES_DIR])
   const changedFiles = fs.getChangedFiles(watchedFiles, files)
   if (!is.empty(changedFiles)) {
-    console.log(changedFiles)
+    log.info('changed files', changedFiles)
   }
   // setting cache after getting the changedFiles
   // leads to the first run building at all times,
