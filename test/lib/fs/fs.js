@@ -33,13 +33,13 @@ const types = {
 module.exports = [
   { fn: () => fs, expect: is.object, info: 'fs is an object' },
   {
+    fn: () => fs.exists,
+    expect: is.fn,
+    info: 'fs.exists is a function to make sure the contentTypes loop works',
+  },
+  {
     fn: () => Object.entries(fs).filter(([k, v]) => !types[k](v)),
     expect: is.empty,
     info: 'all values of fs are correct type',
-  },
-  {
-    fn: () => fs.exists,
-    expect: is.fn,
-    info: 'exists is a function to make sure the contentTypes loop works',
   },
 ]

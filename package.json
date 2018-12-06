@@ -19,6 +19,7 @@
     }
   ],
   "dependencies": {
+    "@magic/deep": "github:magic/deep",
     "@magic/log": "github:magic/log",
     "@magic/types": "github:magic/types",
     "node-zopfli-es": "1.0.0",

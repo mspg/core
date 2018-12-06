@@ -10,19 +10,22 @@ const resolveUrl = async req => {
   const file = path.join(conf.OUT_DIR, req.url)
 
   if (path.resolve(file) === path.resolve(conf.OUT_DIR)) {
-    //index.html
+    //index.html is the default resolve for /
     return path.join(conf.OUT_DIR, 'index.html')
   }
 
   try {
+    // file exists
     if (await fs.exists(file)) {
       return file
     }
 
+    // file exists as html, /about loads /about.html
     if (await fs.exists(`${file}.html`)) {
       return `${file}.html`
     }
 
+    // file exists as index.html and file is a directory.
     const f = path.join(file, 'index.html')
     if (await fs.exists(f)) {
       return f
@@ -39,10 +42,8 @@ const handler = async (req, res) => {
     let filePath = await resolveUrl(req)
 
     const file404 = path.join(conf.OUT_DIR, '404.html')
-    if (!filePath) {
-      if (await fs.exists(file404)) {
-        filePath = file404
-      }
+    if (!filePath && (await fs.exists(file404))) {
+      filePath = file404
     }
 
     if (filePath) {

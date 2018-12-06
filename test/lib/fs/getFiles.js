@@ -36,7 +36,7 @@ module.exports = [
   {
     fn: async () => await fs.getFiles(dirName),
     before,
-    expect: is.object,
+    expect: is.length.equal(3),
     info: 'finds all files in directory. recursively.',
   },
 ]
