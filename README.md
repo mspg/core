@@ -4,6 +4,7 @@
 [![Linux Build Status][travis-image]][travis-url]
 [![Windows Build Status][appveyor-image]][appveyor-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
+[![Greenkeeper badge](https://badges.greenkeeper.io/mspg/core.svg)](https://greenkeeper.io/)
 
 transforms a src directory into a github hosted gh-pages branch.
 
