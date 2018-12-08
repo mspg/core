@@ -1,18 +1,18 @@
 const is = require('@magic/types')
 const getFileType = require('./getFileType')
 const addTrailingSlash = require('../addTrailingSlash')
-const conf = require('../../config')
+const { WEB_ROOT, TRANSPILERS, IGNORE_EXTENSIONS } = require('../../config')
 
 const transpileHTML = html =>
   html
     .replace(/{{ /gi, '{{')
     .replace(/ }}/gi, '}}')
-    .replace(/{{WEB_ROOT}}/gi, addTrailingSlash(conf.WEB_ROOT))
+    .replace(/{{WEB_ROOT}}/gi, addTrailingSlash(WEB_ROOT))
 
 const transpileFile = async file => {
   let { name, buffer } = file
   const type = getFileType(name)
-  if (conf.IGNORE_EXTENSIONS.includes(type)) {
+  if (IGNORE_EXTENSIONS.includes(type)) {
     log.info('File ignored by extension', name)
     return
   }
@@ -21,10 +21,10 @@ const transpileFile = async file => {
     buffer = transpileHTML(buffer)
   }
 
-  if (!is.empty(conf.TRANSPILERS)) {
-    const transpiler = conf.TRANSPILERS[type.toUpperCase()]
+  if (!is.empty(TRANSPILERS)) {
+    const transpiler = TRANSPILERS[type.toUpperCase()]
     if (is.function(transpiler)) {
-      const bundler = { buffer, config: conf, ...file }
+      const bundler = { buffer, config, ...file }
       return await transpiler(bundler)
     }
   }
