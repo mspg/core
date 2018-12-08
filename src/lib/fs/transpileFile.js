@@ -12,7 +12,7 @@ const transpileHTML = html =>
 const transpileFile = async file => {
   let { name, buffer } = file
   const type = getFileType(name)
-  if (conf.IGNORE_EXTENSIONS.indexOf(type) > -1) {
+  if (conf.IGNORE_EXTENSIONS.includes(type)) {
     log.info('File ignored by extension', name)
     return
   }
