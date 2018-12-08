@@ -11,24 +11,26 @@ const write = async file => {
   const { buffer, bundle, out } = file
 
   // no changes, resolve
-  if (fileCache[out]) {
-    if (fileCache[out].buffer === buffer) {
-      return file
-    }
+  if (fileCache[out] && fileCache[out].buffer.toString() === buffer.toString()) {
+    return file
   }
 
   // write file to "cache"
   fileCache[out] = file
 
-  // create directory for file if it does not exist
-  await mkdirp(path.dirname(out))
+  try {
+    // create directory for file if it does not exist
+    await mkdirp(path.dirname(out))
 
-  // write file to disk
-  const written = await fs.writeFile(out, bundle)
+    // write file to disk
+    const written = await fs.writeFile(out, bundle)
 
-  log.info('writeFile', out)
+    log.info('writeFile', out)
 
-  return written
+    return written
+  } catch(e) {
+    log.error(e)
+  }
 }
 
 module.exports = write
