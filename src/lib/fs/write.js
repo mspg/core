@@ -4,20 +4,18 @@ const log = require('@magic/log')
 const path = require('path')
 const { INCLUDES_DIR }= require('../../config')
 
-const fileCache = {}
+// const fileCache = {}
 
 const write = async file => {
   const { buffer, bundle, out } = file
 
   // no changes, resolve
-  if (fileCache[out]) {
-    if (fileCache[out].buffer === buffer) {
-      return file
-    }
-  }
+  // if (fileCache[out] && fileCache[out].buffer === buffer) {
+  //   return file
+  // }
 
   // write file to "cache"
-  fileCache[out] = file
+  // fileCache[out] = file
 
 
   try {
