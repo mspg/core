@@ -5,15 +5,17 @@ const getFileType = require('./getFileType')
 
 const conf = require('../../config')
 
-const filterIncludes = type => k => type !== getFileType(k) && !k.startsWith(conf.SRC_DIR)
+const filterIncludes = type => k => type === getFileType(k) && k.startsWith(conf.BUNDLE_DIR)
 
 const mapIncludesToSrc = (watchedFiles, files) => ([k, file]) => {
-  if (hasFileChanged(watchedFiles[k], file)) {
+  const hasChanged = hasFileChanged(watchedFiles[k], file)
+  if (hasChanged) {
     if (k.includes(conf.INCLUDES_DIR)) {
       if (k.includes(conf.HTML_DIR)) {
         return Object.keys(files).filter(filterIncludes('html'))
       } else if (k.includes(conf.CSS_DIR)) {
-        return Object.keys(files).filter(filterIncludes('css'))
+        const f = Object.keys(files).filter(filterIncludes('css'))
+        return f
       } else if (k.includes(conf.JS_DIR)) {
         return Object.keys(files).filter(filterIncludes('js'))
       } else {
