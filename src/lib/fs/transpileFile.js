@@ -1,7 +1,9 @@
 const is = require('@magic/types')
 const getFileType = require('./getFileType')
 const addTrailingSlash = require('../addTrailingSlash')
-const { WEB_ROOT, TRANSPILERS, IGNORE_EXTENSIONS } = require('../../config')
+const config = require('../../config')
+
+const { WEB_ROOT, TRANSPILERS, IGNORE_EXTENSIONS } = config
 
 const transpileHTML = html =>
   html
