@@ -28,7 +28,7 @@ const write = async file => {
     log.info('writeFile', out)
 
     return written
-  } catch(e) {
+  } catch (e) {
     log.error(e)
   }
 }

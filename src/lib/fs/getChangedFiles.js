@@ -26,8 +26,10 @@ const mapIncludesToSrc = (watchedFiles, files) => ([k, file]) => {
 const getChangedFiles = (watchedFiles, files) =>
   is.empty(watchedFiles)
     ? Object.keys(files)
-    : deep.flatten(Object.entries(files)
-        .map(mapIncludesToSrc(watchedFiles, files))
-        .filter(a => a))
+    : deep.flatten(
+        Object.entries(files)
+          .map(mapIncludesToSrc(watchedFiles, files))
+          .filter(a => a),
+      )
 
 module.exports = getChangedFiles
