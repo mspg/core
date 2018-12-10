@@ -2,7 +2,7 @@ const fs = require('./fs')
 const mkdirp = require('./mkdirp')
 const log = require('@magic/log')
 const path = require('path')
-const { INCLUDES_DIR }= require('../../config')
+const { INCLUDES_DIR } = require('../../config')
 
 // const fileCache = {}
 
@@ -16,7 +16,6 @@ const write = async file => {
 
   // write file to "cache"
   // fileCache[out] = file
-
 
   try {
     if (out.startsWith(INCLUDES_DIR)) {
@@ -32,7 +31,7 @@ const write = async file => {
     log.info('writeFile', out)
 
     return written
-  } catch(e) {
+  } catch (e) {
     log.error(e)
   }
 }
