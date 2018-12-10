@@ -7,13 +7,18 @@
   </head>
   <body>
     <h1>Welcome to mspg</h1>
-    <h2>Todo:</h2>
-    <div>Add usage info here.</div>
     <img src="{{ WEB_ROOT }}img/testing/magic.jpg" />
     <h2>CSS</h2>
     <div class="green">If this is green, css works</div>
     <h2>JS</h2>
     <div id="js">is this is visible, javascript does not work!</div>
+    <div>
+      <p>
+        The Image below indicates that replacement of
+        the WEB_ROOT variable works even with badly formatted brackets
+      </p>
+      <img src="{ { WEB_ROOT } }img/testing/magic.jpg" />
+    </div>
     <script src="{{ WEB_ROOT }}main.js"></script>
   </body>
 </html>
