@@ -12,4 +12,9 @@ const transpileHTML = html =>
     .replace(transpileCloseRegex, '}}')
     .replace(/\s*{\s*{\s*WEB_ROOT\s*}\s*}\s*/gim, addTrailingSlash(WEB_ROOT))
 
+transpileHTML.regex = {
+  open: transpileOpenRegex,
+  close: transpileCloseRegex,
+}
+
 module.exports = transpileHTML

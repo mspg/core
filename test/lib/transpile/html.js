@@ -20,4 +20,24 @@ module.exports = [
     expect: t => t.includes(WEB_ROOT),
     info: 'correctly transforms {{WEB_ROOT}}',
   },
+  {
+    fn: '" { { test'.replace(transpileHTML.regex.open, '"{{'),
+    expect: '"{{test',
+    info: 'replaces spaces between opening brackets',
+  },
+  {
+    fn: ' " { { test'.replace(transpileHTML.regex.open, '"{{'),
+    expect: ' "{{test',
+    info: 'does not replace spaces before first "',
+  },
+  {
+    fn: 'test } } '.replace(transpileHTML.regex.close, '}}'),
+    expect: 'test}}',
+    info: 'replaces spaces between closing brackets',
+  },
+  {
+    fn: 'test } } " '.replace(transpileHTML.regex.close, '}}'),
+    expect: 'test}}" ',
+    info: 'does not replace spaces before last "',
+  },
 ]
