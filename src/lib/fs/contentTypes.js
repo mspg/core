@@ -23,4 +23,5 @@ module.exports = {
   jpeg: 'image/jpeg',
   jpg: 'image/jpg',
   gif: 'image/gif',
+  ico: 'image/x-icon',
 }
