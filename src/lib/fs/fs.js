@@ -1,4 +1,3 @@
-const is = require('@magic/types')
 const fso = require('fs')
 const util = require('util')
 
