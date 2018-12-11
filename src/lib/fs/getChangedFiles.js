@@ -2,6 +2,7 @@ const is = require('@magic/types')
 const deep = require('@magic/deep')
 const hasFileChanged = require('./hasFileChanged')
 const getFileType = require('./getFileType')
+const log = require('@magic/log')
 
 const conf = require('../../config')
 
