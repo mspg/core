@@ -1,7 +1,7 @@
 const fs = require('./fs')
 const getContentType = require('./getContentType')
 
-const conf = require('../../config')
+const { BUNDLE_DIR, OUT_DIR } = require('../../config')
 
 const getFileContent = async file => {
   const { name } = file
@@ -14,7 +14,7 @@ const getFileContent = async file => {
 
   const buffer = await fs.readFile(name, textFmt)
 
-  const out = name.replace(conf.BUNDLE_DIR, conf.OUT_DIR)
+  const out = name.replace(BUNDLE_DIR, OUT_DIR)
 
   return {
     name,
