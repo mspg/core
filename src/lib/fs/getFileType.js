@@ -1,4 +1,3 @@
-const is = require('@magic/types')
 const getFileType = name => {
   if (!name || !name.includes('.')) {
     return 'txt'
