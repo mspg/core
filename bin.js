@@ -25,8 +25,8 @@ if (hasArgv()) {
 
     examples:
     production build
-    NODE_ENV=production mspg clean build zip 
-  
+    NODE_ENV=production mspg clean build zip
+
     development (build files and serve them on 3000)
     mspg build serve
   `)
