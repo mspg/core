@@ -16,4 +16,5 @@ module.exports = {
   maybeWriteFile: require('./maybeWriteFile'),
   write: require('./write'),
   rm: require('./rm'),
+  resolveUrl: require('./resolveUrl'),
 }
