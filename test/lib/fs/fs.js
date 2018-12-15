@@ -28,6 +28,7 @@ const types = {
   rmDir: is.fn,
   unlink: is.fn,
   rm: is.fn,
+  resolveUrl: is.fn,
 }
 
 module.exports = [
