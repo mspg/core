@@ -20,13 +20,13 @@
   ],
   "dependencies": {
     "@magic/deep": "github:magic/deep",
-    "@magic/log": "github:magic/log",
-    "@magic/types": "github:magic/types",
+    "@magic/log": "0.0.2",
+    "@magic/types": "0.0.2",
     "node-zopfli-es": "1.0.0",
     "purify-css": "1.2.5"
   },
   "devDependencies": {
-    "@magic/test": "github:magic/test"
+    "@magic/test": "0.0.2"
   },
   "files": [
     "src",
