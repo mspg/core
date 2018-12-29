@@ -20,6 +20,7 @@ const minify = style =>
     .trim()
 
 module.exports = (style, config = { OUT_DIR: process.cwd() }) => {
+  style = style.buffer || style
   if (!config.PURGE_CSS) {
     return minify(style)
   }
