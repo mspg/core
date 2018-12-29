@@ -21,11 +21,13 @@ const transpileFile = async file => {
   if (!is.empty(TRANSPILERS)) {
     const transpiler = TRANSPILERS[type.toUpperCase()]
     if (is.function(transpiler)) {
-      const bundler = { buffer, config, ...file }
+      const bundler = { ...file, config, buffer }
       const transpiled = await transpiler(bundler)
+
       if (is.string(transpiled)) {
         return transpiled
       } else if (is.object(transpiled)) {
+
         if (transpiled.sourcemap) {
           const out = `${file.name}.map`.replace(config.BUNDLE_DIR, config.OUT_DIR)
           await write({ out, bundle: JSON.stringify(transpiled.sourcemap) })
@@ -33,7 +35,6 @@ const transpileFile = async file => {
 
         return transpiled.buffer
       }
-
     }
   }
 
