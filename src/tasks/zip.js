@@ -72,7 +72,7 @@ const zipFile = file => {
       )
       if (gzSize > origSize) {
         // gzip is bigger than original, delete gzipped file
-        log.warn(file, 'gzipped files is bigger than original. deleting .gz')
+        log.warn(file, 'gzipped file is bigger than original. deleting .gz')
         await fs.rmrf(gzFileName)
       }
       resolve()
