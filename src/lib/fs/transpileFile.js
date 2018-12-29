@@ -15,7 +15,7 @@ const transpileFile = async file => {
   }
 
   if (type === 'html') {
-    buffer = transpileHTML(buffer)
+    buffer = transpileHTML(file)
   }
 
   if (!is.empty(TRANSPILERS)) {
