@@ -2,6 +2,7 @@ const is = require('@magic/types')
 const getFileType = require('./getFileType')
 const config = require('../../config')
 const transpileHTML = require('../transpile/html')
+const write = require('./write')
 
 const { TRANSPILERS, IGNORE_EXTENSIONS } = config
 
@@ -21,7 +22,18 @@ const transpileFile = async file => {
     const transpiler = TRANSPILERS[type.toUpperCase()]
     if (is.function(transpiler)) {
       const bundler = { buffer, config, ...file }
-      return await transpiler(bundler)
+      const transpiled = await transpiler(bundler)
+      if (is.string(transpiled)) {
+        return transpiled
+      } else if (is.object(transpiled)) {
+        if (transpiled.sourcemap) {
+          const out = `${file.name}.map`.replace(config.BUNDLE_DIR, config.OUT_DIR)
+          await write({ out, bundle: JSON.stringify(transpiled.sourcemap) })
+        }
+
+        return transpiled.buffer
+      }
+
     }
   }
 
