@@ -22,7 +22,7 @@
     "@magic/deep": "github:magic/deep",
     "@magic/log": "0.0.2",
     "@magic/types": "0.0.2",
-    "node-zopfli-es": "1.0.0",
+    "node-zopfli-es": "1.0.1",
     "purify-css": "1.2.5"
   },
   "devDependencies": {
