@@ -1,7 +1,7 @@
 const is = require('@magic/types')
 const fs = require('./fs')
 
-const conf = require('../../config')
+const conf = require('../config')
 
 const minifyFile = file => {
   const { name, bundle } = file
