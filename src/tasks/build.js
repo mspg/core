@@ -3,6 +3,7 @@ const is = require('@magic/types')
 
 const serve = require('./serve')
 const fs = require('../lib/fs')
+const maybeWriteFile = require('../lib/maybeWriteFile')
 
 const conf = require('../config')
 
@@ -19,7 +20,7 @@ const watch = async () => {
   // do not change the order.
   watchedFiles = files
 
-  await Promise.all(changedFiles.map(fs.maybeWriteFile(watchedFiles)))
+  await Promise.all(changedFiles.map(maybeWriteFile(watchedFiles)))
 
   if (conf.WATCH) {
     setTimeout(watch, 300)

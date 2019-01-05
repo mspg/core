@@ -1,8 +1,8 @@
 const is = require('@magic/types')
-const getFileType = require('./getFileType')
-const config = require('../../config')
-const transpileHTML = require('../transpile/html')
-const write = require('./write')
+const getFileType = require('./fs/getFileType')
+const config = require('../config')
+const transpileHTML = require('./transpile/html')
+const { write } = require('./fs/')
 
 const { TRANSPILERS, IGNORE_EXTENSIONS } = config
 

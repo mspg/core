@@ -2,13 +2,14 @@ const http = require('http')
 const path = require('path')
 
 const fs = require('../lib/fs')
+const resolveUrl = require('../lib/resolveUrl')
 const log = require('@magic/log')
 
 const conf = require('../config')
 
 const handler = async (req, res) => {
   try {
-    let filePath = await fs.resolveUrl(req)
+    let filePath = await resolveUrl(req)
 
     const file404 = path.join(conf.OUT_DIR, '404.html')
     if (!filePath && (await fs.exists(file404))) {

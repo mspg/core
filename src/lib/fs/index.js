@@ -11,10 +11,6 @@ module.exports = {
   contentTypes: require('./contentTypes'),
   getFileType: require('./getFileType'),
   getContentType: require('./getContentType'),
-  transpileFile: require('./transpileFile'),
-  minifyFile: require('./minifyFile'),
-  maybeWriteFile: require('./maybeWriteFile'),
   write: require('./write'),
   rm: require('./rm'),
-  resolveUrl: require('./resolveUrl'),
 }

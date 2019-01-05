@@ -1,6 +1,6 @@
 const { is } = require('@magic/test')
 
-const fs = require('../../../src/lib/fs')
+const fs = require('../../../src/lib/fs/')
 
 const types = {
   mkdirp: is.fn,

@@ -1,6 +1,6 @@
 const path = require('path')
-const fs = require('./fs')
-const getFileType = require('./getFileType')
+
+const fs = require('../../src/lib/fs')
 
 const { OUT_DIR } = require('../../config')
 
