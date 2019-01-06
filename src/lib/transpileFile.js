@@ -1,4 +1,5 @@
 const is = require('@magic/types')
+const log = require('@magic/log')
 const getFileType = require('./fs/getFileType')
 const config = require('../config')
 const transpileHTML = require('./transpile/html')
