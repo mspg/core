@@ -14,6 +14,6 @@ module.exports = options => input => {
   }
 
   return sharp(input)
-    .resize(options.width, options.height)
+    .resize(options.width, options.height, { withoutEnlargement: true })
     .toBuffer()
 }
