@@ -33,17 +33,18 @@ const walk = async dir => {
 
 // compress a single file
 const zipFile = file => {
-  log('zipping:', file)
   // image file
   if (conf.IMAGE_EXTENSIONS.some(ext => file.endsWith(ext))) {
     return
   }
 
+  // do not zip zip files, do not zip CNAME file
   if (['.gz', 'CNAME'].some(ext => file.endsWith(ext))) {
     return
   }
 
   return new Promise((resolve, reject) => {
+    log('zipping:', file)
     const gzFileName = `${file}.gz`
     const options = {
       verbose: false,
