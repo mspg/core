@@ -1,16 +1,17 @@
 const fs = require('./fs')
 const path = require('path')
 
-const transpileFile = require('./transpileFile')
-const minifyFile = require('./minifyFile')
-
-const { BUNDLE_DIR, OUT_DIR, IMAGE_EXTENSIONS, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT } = require('../config')
-
 const imagemin = require('imagemin')
 const imageminPng = require('imagemin-pngquant')
 const imageminSvg = require('imagemin-svgo')
 const imageminGif = require('imagemin-gifsicle')
 const imageminJpg = require('imagemin-mozjpeg')
+const log = require('@magic/log')
+
+const transpileFile = require('./transpileFile')
+const minifyFile = require('./minifyFile')
+
+const { BUNDLE_DIR, OUT_DIR, IMAGE_EXTENSIONS, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT } = require('../config')
 
 const imageminSharp = require('./imagemin-sharp')
 
@@ -33,6 +34,7 @@ const minifyImage = async (file) => {
 const maybeWriteFile = watchedFiles => async name => {
   try {
     if (IMAGE_EXTENSIONS.some(ext => name.endsWith(ext))) {
+      log('minify image:', name.replace(BUNDLE_DIR, ''))
       return await minifyImage(name)
     }
 
@@ -44,6 +46,7 @@ const maybeWriteFile = watchedFiles => async name => {
       const minified = await minifyFile({ name, bundle })
       await fs.write({ buffer, bundle: minified, out })
       watchedFiles[name].content = minified
+      log('minified file:', name.replace(BUNDLE_DIR, ''))
       return minified
     }
   } catch (e) {
