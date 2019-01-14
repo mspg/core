@@ -33,6 +33,7 @@ const walk = async dir => {
 
 // compress a single file
 const zipFile = file => {
+  log('zipping:', file)
   // image file
   if (conf.IMAGE_EXTENSIONS.some(ext => file.endsWith(ext))) {
     return
