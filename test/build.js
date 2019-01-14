@@ -44,7 +44,7 @@ const imgFileExists = async () => await fs.exists(imgExampleFile)
 const imgFileIsEqual = async () => {
   const example = await fs.stat(imgExampleFile)
   const src = await fs.stat(imgSourceFile)
-  return example.size === src.size
+  return example.size <= src.size
 }
 
 const jsExampleFile = path.join(publicDir, 'main.js')

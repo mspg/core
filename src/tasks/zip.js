@@ -6,7 +6,7 @@ const log = require('@magic/log')
 const fs = require('../lib/fs')
 const conf = require('../config')
 
-const walk = async (dir, done) => {
+const walk = async dir => {
   try {
     let results = []
     const list = await fs.readdir(dir)
@@ -31,18 +31,14 @@ const walk = async (dir, done) => {
   }
 }
 
-// simply tests if a file ends with .gz
-const fileEndsWith = file => suffix => file.indexOf(suffix) === file.length - suffix.length
-
 // compress a single file
 const zipFile = file => {
-  // do not run for files we can compress with imagemin
-  if (['.gif', '.jpg', '.jpeg', '.png'].some(fileEndsWith(file))) {
-    // TODO: actually use imagemin
+  // image file
+  if (conf.IMAGE_EXTENSIONS.some(ext => file.endsWith(ext))) {
     return
   }
 
-  if (['.gz', 'CNAME'].some(fileEndsWith(file))) {
+  if (['.gz', 'CNAME'].some(ext => file.endsWith(ext))) {
     return
   }
 
@@ -93,6 +89,7 @@ const zip = async () => {
     const files = await walk(conf.OUT_DIR)
 
     await Promise.all(files.map(zipFile))
+
     log.timeEnd('zip')
   } catch (e) {
     throw e
