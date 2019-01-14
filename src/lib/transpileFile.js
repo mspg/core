@@ -5,21 +5,12 @@ const config = require('../config')
 const transpileHTML = require('./transpile/html')
 const { write } = require('./fs/')
 
-const { TRANSPILERS, IGNORE_EXTENSIONS, IMAGE_EXTENSIONS } = config
+const { TRANSPILERS } = config
 
 const transpileFile = async file => {
   try {
     let { name, buffer } = file
     const type = getFileType(name)
-
-    if (IGNORE_EXTENSIONS.includes(type)) {
-      log.info('File ignored by extension', name)
-      return
-    }
-
-    if (IMAGE_EXTENSIONS.includes(type)) {
-      return
-    }
 
     if (type === 'html') {
       buffer = transpileHTML(file)

@@ -44,7 +44,8 @@ const zipFile = file => {
   }
 
   return new Promise((resolve, reject) => {
-    log('zipping:', file)
+    const timeIndex = `zipping: ${file.replace(conf.OUT_DIR, '')}`
+    log.time(timeIndex)
     const gzFileName = `${file}.gz`
     const options = {
       verbose: false,
@@ -73,6 +74,7 @@ const zipFile = file => {
         log.warn(file, 'gzipped file is bigger than original. deleting .gz')
         await fs.rmrf(gzFileName)
       }
+      log.timeEnd(timeIndex)
       resolve()
     })
   })

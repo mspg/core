@@ -15,6 +15,7 @@ const {
   BUNDLE_DIR,
   OUT_DIR,
   IMAGE_EXTENSIONS,
+  IGNORE_EXTENSIONS,
   MAX_IMAGE_WIDTH,
   MAX_IMAGE_HEIGHT,
 } = require('../config')
@@ -39,19 +40,30 @@ const minifyImage = async file => {
 
 const maybeWriteFile = watchedFiles => async name => {
   try {
+    const timeIndex = `minify: ${name.replace(BUNDLE_DIR, '')}`
+
+    log.time(timeIndex)
     if (IMAGE_EXTENSIONS.some(ext => name.endsWith(ext))) {
-      log('minify image:', name.replace(BUNDLE_DIR, ''))
-      return await minifyImage(name)
+      const img = await minifyImage(name)
+      log.timeEnd(timeIndex)
+      return img
     }
 
     const { buffer, out } = await fs.getFileContent({ name })
+
+    if (IGNORE_EXTENSIONS.some(ext => name.endsWith(ext))) {
+      log.info('File ignored by extension', name)
+      return
+    }
+
+
 
     const bundle = await transpileFile({ name, buffer })
     if (bundle) {
       const minified = await minifyFile({ name, bundle })
       await fs.write({ buffer, bundle: minified, out })
       watchedFiles[name].content = minified
-      log('minified file:', name.replace(BUNDLE_DIR, ''))
+      log.timeEnd(timeIndex)
       return minified
     }
   } catch (e) {
