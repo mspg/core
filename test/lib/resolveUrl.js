@@ -25,7 +25,7 @@ const resolveUrl = async req => {
     }
 
     // file exists
-    if ((await fs.exists(file))) {
+    if (await fs.exists(file)) {
       const stat = await fs.stat(file)
       if (stat.isFile()) {
         return file

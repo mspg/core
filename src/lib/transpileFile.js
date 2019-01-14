@@ -7,7 +7,6 @@ const { write } = require('./fs/')
 
 const { TRANSPILERS, IGNORE_EXTENSIONS, IMAGE_EXTENSIONS } = config
 
-
 const transpileFile = async file => {
   try {
     let { name, buffer } = file
@@ -48,11 +47,10 @@ const transpileFile = async file => {
 
     // transpiler does not exist, just return stringified buffer as bundle
     return buffer
-  } catch(e) {
+  } catch (e) {
     log.error('error in lib/transpileFile', e)
     process.exit(1)
   }
-
 }
 
 module.exports = transpileFile

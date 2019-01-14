@@ -8,14 +8,15 @@ const { WEB_ROOT, BUNDLE_DIR } = config
 const transpileOpenRegex = /\s*{\s*{\s*/gim
 const transpileCloseRegex = /\s*}\s*}\s*/gim
 
-const transpileHTML = (props) => {
+const transpileHTML = props => {
   if (!is.object(props) || !props.buffer || !props.name) {
     throw new Error('Invalid props in transpileHTML')
   }
 
   const { name, buffer } = props
 
-  const cleanedDir = path.dirname(name)
+  const cleanedDir = path
+    .dirname(name)
     .replace(BUNDLE_DIR, WEB_ROOT)
     .replace(/\/\//gm, '/')
 

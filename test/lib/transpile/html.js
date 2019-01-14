@@ -4,7 +4,11 @@ const { WEB_ROOT } = require('../../../src/config')
 const addTrailingSlash = require('../../../src/lib/addTrailingSlash')
 
 module.exports = [
-  { fn: tryCatch(transpileHTML, { buffer: '' }), expect: is.error, info: 'returns error with invalid buffer' },
+  {
+    fn: tryCatch(transpileHTML, { buffer: '' }),
+    expect: is.error,
+    info: 'returns error with invalid buffer',
+  },
   {
     fn: tryCatch(transpileHTML, null),
     expect: is.error,

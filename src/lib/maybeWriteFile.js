@@ -11,11 +11,17 @@ const log = require('@magic/log')
 const transpileFile = require('./transpileFile')
 const minifyFile = require('./minifyFile')
 
-const { BUNDLE_DIR, OUT_DIR, IMAGE_EXTENSIONS, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT } = require('../config')
+const {
+  BUNDLE_DIR,
+  OUT_DIR,
+  IMAGE_EXTENSIONS,
+  MAX_IMAGE_WIDTH,
+  MAX_IMAGE_HEIGHT,
+} = require('../config')
 
 const imageminSharp = require('./imagemin-sharp')
 
-const minifyImage = async (file) => {
+const minifyImage = async file => {
   const input = [file]
   const output = path.dirname(file.replace(BUNDLE_DIR, OUT_DIR))
   return await imagemin(input, output, {
@@ -39,7 +45,6 @@ const maybeWriteFile = watchedFiles => async name => {
     }
 
     const { buffer, out } = await fs.getFileContent({ name })
-
 
     const bundle = await transpileFile({ name, buffer })
     if (bundle) {
