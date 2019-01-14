@@ -19,7 +19,8 @@ const write = async file => {
 
   try {
     if (out.startsWith(INCLUDES_DIR)) {
-      throw new Error(`Tried writing includes file ${out}`)
+      // throw new Error(`Tried writing includes file ${out}`)
+      return
     }
 
     // create directory for file if it does not exist
