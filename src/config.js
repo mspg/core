@@ -27,6 +27,7 @@ config.GIT_BRANCH = 'gh-pages'
 config.IGNORE_EXTENSIONS = []
 config.VERBOSE = argv.includes('verbose')
 config.IMAGE_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'jp2']
+config.MAX_IMAGE_WIDTH = 2000
 
 config.TASKS = {
   CLEAN: argv.includes('clean') || (config.ENV === 'production' && argv.includes('build')),
