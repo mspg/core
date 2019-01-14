@@ -26,6 +26,7 @@ config.GIT_ORIGIN = 'origin'
 config.GIT_BRANCH = 'gh-pages'
 config.IGNORE_EXTENSIONS = []
 config.VERBOSE = argv.includes('verbose')
+config.IMAGE_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'jp2']
 
 config.TASKS = {
   CLEAN: argv.includes('clean') || (config.ENV === 'production' && argv.includes('build')),
