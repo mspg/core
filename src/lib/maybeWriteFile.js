@@ -19,6 +19,7 @@ const {
   IGNORE_EXTENSIONS,
   MAX_IMAGE_WIDTH,
   MAX_IMAGE_HEIGHT,
+  ENV,
 } = require('../config')
 
 const minifyImage = async file => {
@@ -43,9 +44,11 @@ const maybeWriteFile = watchedFiles => async name => {
 
     log.time(timeIndex)
     if (IMAGE_EXTENSIONS.some(ext => name.endsWith(ext))) {
-      const img = await minifyImage(name)
-      log.timeEnd(timeIndex)
-      return img
+      if (ENV === 'production') {
+        const img = await minifyImage(name)
+        log.timeEnd(timeIndex)
+        return img
+      }
     }
 
     const { buffer, out } = await fs.getFileContent({ name })
