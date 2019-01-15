@@ -4,4 +4,5 @@ module.exports = {
   zip: require('./zip'),
   connect: require('./connect'),
   clean: require('./clean'),
+  resizeImages: require('./resizeImages'),
 }

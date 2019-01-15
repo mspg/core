@@ -30,6 +30,7 @@ config.VERBOSE = argv.includes('verbose')
 config.IMAGE_EXTENSIONS = ['gif', 'jpg', 'jpeg', 'png', 'webp', 'jp2']
 config.MAX_IMAGE_WIDTH = config.MAX_IMAGE_WIDTH || 2000
 config.MAX_IMAGE_HEIGHT = config.MAX_IMAGE_HEIGHT || 1000
+config.IMAGE_QUALITY = 80
 
 config.TASKS = {
   CLEAN: argv.includes('clean') || (config.ENV === 'production' && argv.includes('build')),
@@ -39,6 +40,7 @@ config.TASKS = {
   ZIP: argv.includes('zip'),
   CONNECT: argv.includes('connect'),
   SERVE: argv.includes('serve'),
+  RESIZE_IMAGES: argv.includes('resize-images'),
 }
 
 config.MINIFY = {
