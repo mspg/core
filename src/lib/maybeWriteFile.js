@@ -21,7 +21,6 @@ const {
   MAX_IMAGE_HEIGHT,
 } = require('../config')
 
-
 const minifyImage = async file => {
   const input = [file]
   const output = path.dirname(file.replace(BUNDLE_DIR, OUT_DIR))
@@ -55,8 +54,6 @@ const maybeWriteFile = watchedFiles => async name => {
       log.info('File ignored by extension', name)
       return
     }
-
-
 
     const bundle = await transpileFile({ name, buffer })
     if (bundle) {
