@@ -6,6 +6,7 @@ const imageminPng = require('imagemin-pngquant')
 const imageminSvg = require('imagemin-svgo')
 const imageminGif = require('imagemin-gifsicle')
 const imageminJpg = require('imagemin-mozjpeg')
+const imageminJimp = require('imagemin-jimp')
 const log = require('@magic/log')
 
 const transpileFile = require('./transpileFile')
@@ -20,14 +21,13 @@ const {
   MAX_IMAGE_HEIGHT,
 } = require('../config')
 
-const imageminSharp = require('./imagemin-sharp')
 
 const minifyImage = async file => {
   const input = [file]
   const output = path.dirname(file.replace(BUNDLE_DIR, OUT_DIR))
   return await imagemin(input, output, {
     plugins: [
-      imageminSharp({ width: MAX_IMAGE_WIDTH, height: MAX_IMAGE_HEIGHT }),
+      imageminJimp({ width: MAX_IMAGE_WIDTH, height: MAX_IMAGE_HEIGHT }),
       imageminJpg({ quality: 70 }),
       imageminPng({ quality: [0.6, 0.75] }),
       imageminGif({ optimizationLevel: 3 }),
