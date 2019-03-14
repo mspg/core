@@ -8,9 +8,7 @@ const minifyFile = require('./minifyFile')
 
 const {
   BUNDLE_DIR,
-  OUT_DIR,
   IGNORE_EXTENSIONS,
-  ENV,
 } = require('../config')
 
 const maybeWriteFile = watchedFiles => async name => {
