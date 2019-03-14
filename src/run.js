@@ -2,8 +2,6 @@ const tasks = require('./tasks')
 
 const run = async () => {
   try {
-    await tasks.resizeImages()
-
     // connects this installation to github/gitlab remote
     await tasks.connect()
 
