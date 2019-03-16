@@ -16,6 +16,8 @@ module.exports = {
   mpeg: 'audio/mpeg',
   mpg: 'audio/mpg',
   ogg: 'audio/ogg',
+  mp3: 'audio/mp3',
+  mp4: 'video/mp4',
   csv: 'text/csv',
   text: 'text/plain',
   txt: 'text/plain',
