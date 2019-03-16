@@ -65,4 +65,6 @@ config.MINIFY = {
 const WEB_ROOT = config.WEB_ROOT || '/'
 config.WEB_ROOT = config.ENV === 'production' ? WEB_ROOT : '/'
 
+config.ZIP_EXTENSIONS = ['html', 'css', 'js', 'json', 'xml', 'text', 'csv', 'txt']
+
 module.exports = config

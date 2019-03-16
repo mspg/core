@@ -38,13 +38,18 @@ const zipFile = file => {
     return
   }
 
+  if (!conf.ZIP_EXTENSIONS.some(ext => file.endsWith(ext))) {
+    return
+  }
+
   // do not zip zip files, do not zip CNAME file
   if (['.gz', 'CNAME'].some(ext => file.endsWith(ext))) {
     return
   }
 
   return new Promise((resolve, reject) => {
-    const timeIndex = `zipping: ${file.replace(conf.OUT_DIR, '')}`
+    log(`zipping: ${file.replace(conf.OUT_DIR, '')}`)
+    const timeIndex = `zipping done: ${file.replace(conf.OUT_DIR, '')}`
     log.time(timeIndex)
     const gzFileName = `${file}.gz`
     const options = {
