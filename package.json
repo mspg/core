@@ -42,6 +42,7 @@
     "start": "t -p",
     "test": "t",
     "build": "NODE_ENV=production ./bin.js build zip",
+    "prod": "NODE_ENV=production ./bin.js build serve watch",
     "dev": "./bin.js build serve watch",
     "format": "f -w",
     "format:check": "f",
