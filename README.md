@@ -31,8 +31,8 @@ help    - this help text
 ##### cli usage examples:
 ```
 # production build
-NODE_ENV=production mspg clean build zip 
-  
+NODE_ENV=production mspg clean build zip
+
 # development (build files, watch for changes, and serve them on localhost:3000)
 mspg build serve watch
 ```
@@ -54,7 +54,7 @@ every transpiler also includes a minimal example project in the example director
 both html toolchains below follow the same rules:
 * every *.html file in the src/ directory is a page and gets transpiled to public/
 * every includes/html/*.extension file is an include file and can be included using /filename.extension
-* every includes/html/*.extension file can also be a template file. using extend you can reuse a html template in both pug and posthtml. 
+* every includes/html/*.extension file can also be a template file. using extend you can reuse a html template in both pug and posthtml.
 
 * [pug](https://github.com/mspg/transpile-pug)
 * [posthtml](https://github.com/mspg/transpile-posthtml)
@@ -72,7 +72,7 @@ both html toolchains below follow the same rules:
 [travis-image]: https://travis-ci.com/mspg/core.svg?branch=master
 [travis-url]: https://travis-ci.org/mspg/core
 [appveyor-image]: https://ci.appveyor.com/api/projects/status/ksffectdrx0ekfb8?svg=true
-[appveyor-url]: https://ci.appveyor.com/project/jaeh/core/branch/master
+[appveyor-url]: https://ci.appveyor.com/project/jaeh/mspgcore/branch/master
 [coveralls-image]: https://coveralls.io/repos/github/mspg/core/badge.svg
 [coveralls-url]: https://coveralls.io/github/mspg/core
 [example-url]: https://github.com/mspg/core/tree/master/example
