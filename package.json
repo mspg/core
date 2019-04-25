@@ -21,7 +21,7 @@
   "dependencies": {
     "@magic/deep": "0.0.1",
     "@magic/log": "0.0.2",
-    "@magic/types": "0.0.3",
+    "@magic/types": "0.0.4",
     "imagemin": "6.1.0",
     "imagemin-gifsicle": "6.0.1",
     "imagemin-jimp": "github:jaeh/imagemin-jimp",
