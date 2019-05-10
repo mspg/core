@@ -20,19 +20,20 @@
   ],
   "dependencies": {
     "@magic/deep": "0.0.1",
-    "@magic/log": "0.0.2",
-    "@magic/types": "0.0.3",
+    "@magic/log": "0.0.3",
+    "@magic/types": "0.0.5",
     "imagemin": "6.1.0",
     "imagemin-gifsicle": "6.0.1",
     "imagemin-jimp": "github:jaeh/imagemin-jimp",
     "imagemin-mozjpeg": "8.0.0",
     "imagemin-pngquant": "7.0.0",
     "imagemin-svgo": "7.0.0",
-    "node-zopfli-es": "1.0.1",
+    "jimp": "^0.6.4",
+    "node-zopfli-es": "1.0.3",
     "purify-css": "1.2.5"
   },
   "devDependencies": {
-    "@magic/test": "0.0.7"
+    "@magic/test": "0.0.12"
   },
   "files": [
     "src",
