@@ -22,7 +22,7 @@
     "@magic/deep": "0.0.1",
     "@magic/log": "0.1.0-cjs",
     "@magic/types": "0.0.5",
-    "imagemin": "6.1.0",
+    "imagemin": "7.0.1",
     "imagemin-gifsicle": "6.0.1",
     "imagemin-jimp": "github:jaeh/imagemin-jimp",
     "imagemin-mozjpeg": "8.0.0",
