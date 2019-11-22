@@ -33,7 +33,7 @@
     "purify-css": "1.2.5"
   },
   "devDependencies": {
-    "@magic/test": "0.0.12"
+    "@magic/test": "0.1.21"
   },
   "files": [
     "src",
