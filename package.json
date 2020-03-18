@@ -28,7 +28,7 @@
     "imagemin-mozjpeg": "8.0.0",
     "imagemin-pngquant": "7.0.0",
     "imagemin-svgo": "7.0.0",
-    "jimp": "0.6.4",
+    "jimp": "0.9.6",
     "node-zopfli-es": "1.0.3",
     "purify-css": "1.2.5"
   },
