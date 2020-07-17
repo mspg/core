@@ -2,6 +2,7 @@ import is from '@magic/types'
 import log from '@magic/log'
 import fs from '@magic/fs'
 
+import write from './write.js'
 import transpileHTML from './transpile/html.js'
 
 const transpileFile = async (file, config) => {
@@ -27,7 +28,7 @@ const transpileFile = async (file, config) => {
         } else if (is.object(transpiled)) {
           if (transpiled.sourcemap) {
             const out = `${file.name}.map`.replace(config.BUNDLE_DIR, config.OUT_DIR)
-            await fs.write({ out, bundle: JSON.stringify(transpiled.sourcemap) })
+            await write({ out, bundle: JSON.stringify(transpiled.sourcemap) })
           }
 
           return transpiled.buffer
