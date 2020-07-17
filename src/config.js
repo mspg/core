@@ -10,10 +10,14 @@ export const getConfig = async () => {
   const configPath = path.join(cwd, 'config.js')
   let config = {}
 
-  const exists = await fs.exists(configPath)
-  if (exists) {
-    const { default: conf } = await import(configPath)
-    config = { ...conf }
+  try {
+    const exists = await fs.exists(configPath)
+    if (exists) {
+      const { default: conf } = await import(configPath)
+      config = { ...conf }
+    }
+  } catch (e) {
+    throw e
   }
 
   const maybePrefixPath = (p, CWD) => {
