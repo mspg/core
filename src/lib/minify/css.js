@@ -1,6 +1,3 @@
-import purify from 'purify-css'
-import path from 'path'
-
 const minify = style =>
   style
     // replace newlines after commas to get multiple css classes onto one line
@@ -19,17 +16,7 @@ const minify = style =>
     .replace(/,\s/gim, ',')
     .trim()
 
-export const css = (style, config) => {
+export const css = style => {
   style = style.buffer || style
-  if (!config.PURGE_CSS) {
-    return minify(style)
-  }
-
-  const OUT_DIR = config.OUT_DIR || process.cwd()
-  const content = [path.join(OUT_DIR, '**/*.js'), path.join(OUT_DIR, '**/*.html')]
-
-  const purified = purify(content, style)
-
-  const minified = minify(purified)
-  return minified
+  return minify(style)
 }
