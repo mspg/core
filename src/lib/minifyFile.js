@@ -6,7 +6,7 @@ const minifyFile = async (file, conf) => {
 
   const type = fs.getFileType(name)
 
-  const minifier = conf.MINIFY && conf.MINIFY[type.toUpperCase()]
+  const minifier = conf.MINIFY && conf.MINIFY[type.toLowerCase()]
 
   if (is.function(minifier)) {
     const minified = minifier(bundle, conf)
