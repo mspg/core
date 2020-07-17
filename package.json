@@ -11,6 +11,10 @@
   "bin": {
     "mspg": "./bin.js"
   },
+  "engines": {
+    "node": ">=14.2.0"
+  },
+  "engineStrict": true,
   "author": "Wizards & Witches",
   "license": "AGPL-3.0",
   "contributors": [
