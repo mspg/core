@@ -17,7 +17,9 @@ const transpileFile = async (file, config) => {
     }
 
     if (!is.empty(TRANSPILERS)) {
-      const transpiler = TRANSPILERS[type.toUpperCase()]
+
+      const transpiler = TRANSPILERS[type.toLowerCase()] || TRANSPILERS[type.toUpperCase()]
+      
       if (is.function(transpiler)) {
         const bundler = { ...file, config, buffer }
         const transpiled = await transpiler(bundler)
