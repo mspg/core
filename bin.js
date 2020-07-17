@@ -20,7 +20,6 @@ if (userWantsHelp) {
     clean   - deletes the public directory
     build   - builds the src dir to public
     serve   - serves the public dir
-    zip     - gzips the public dir using zopfli
     connect - connects the git repository to it's gh-pages branch
     publish - publishes the current HEAD to github/gitlab pages
     help    - this help text
