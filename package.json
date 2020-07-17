@@ -45,7 +45,6 @@
     "dev": "./bin.js build serve watch",
     "format": "f -w -f js json",
     "format:check": "f -f js json",
-    "resizeImages": "./bin.js resize-images",
     "calls": "calls",
     "connect": "NODE_ENV=production ./bin.js connect",
     "publish": "NODE_ENV=production ./bin.js build zip publish",
