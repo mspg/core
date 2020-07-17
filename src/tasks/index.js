@@ -1,6 +1,4 @@
 export { build } from './build.js'
 export { publish } from './publish.js'
-// export { zip } from './zip.js'
 export { connect } from './connect.js'
 export { clean } from './clean.js'
-export { resizeImages } from './resizeImages.js'
