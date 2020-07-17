@@ -30,6 +30,7 @@ const maybeWriteFile = (watchedFiles, conf) => async ([name]) => {
       watchedFiles[name].content = minified
 
       log.timeEnd(timeIndex)
+
       return minified
     }
   } catch (e) {
