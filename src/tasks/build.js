@@ -9,22 +9,26 @@ import maybeWriteFile from '../lib/maybeWriteFile.js'
 let watchedFiles = {}
 
 export const watch = async conf => {
-  const bundleFiles = await getFiles(conf.BUNDLE_DIR)
-  const includesFiles = await getFiles(conf.INCLUDES_DIR)
+  try {
+    const bundleFiles = await getFiles(conf.BUNDLE_DIR)
+    const includesFiles = await getFiles(conf.INCLUDES_DIR)
 
-  const files = { ...bundleFiles, ...includesFiles }
+    const files = { ...bundleFiles, ...includesFiles }
 
-  const changedFiles = await getChangedFiles(watchedFiles, files, conf)
+    const changedFiles = await getChangedFiles(watchedFiles, files, conf)
 
-  // setting cache after getting the changedFiles
-  // leads to the first run building at all times,
-  // do not change the order.
-  watchedFiles = files
+    // setting cache after getting the changedFiles
+    // leads to the first run building at all times,
+    // do not change the order.
+    watchedFiles = files
 
-  await Promise.all(changedFiles.map(maybeWriteFile(watchedFiles, conf)))
+    await Promise.all(changedFiles.map(maybeWriteFile(watchedFiles, conf)))
 
-  if (conf.WATCH) {
-    setTimeout(() => watch(conf), 300)
+    if (conf.WATCH) {
+      setTimeout(() => watch(conf), 300)
+    }
+  } catch (e) {
+    throw e
   }
 }
 

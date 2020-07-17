@@ -32,6 +32,6 @@ const handler = conf => async (req, res) => {
   res.end(response)
 }
 
-export const serve = async conf => http.createServer(handler(conf)).listen(3000)
+export const serve = conf => http.createServer(handler(conf)).listen(3000)
 
 export default serve
