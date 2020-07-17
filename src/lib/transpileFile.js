@@ -30,7 +30,7 @@ const transpileFile = async (file, config) => {
         } else if (is.object(transpiled)) {
           if (transpiled.sourcemap) {
             const out = `${file.name}.map`.replace(config.BUNDLE_DIR, config.OUT_DIR)
-            await write({ out, bundle: JSON.stringify(transpiled.sourcemap) })
+            await write({ out, bundle: JSON.stringify(transpiled.sourcemap) }, config)
           }
 
           return transpiled.buffer
