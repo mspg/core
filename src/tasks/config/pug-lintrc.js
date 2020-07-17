@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   disallowAttributeConcatenation: true,
   disallowAttributeInterpolation: true,
   disallowBlockExpansion: true,

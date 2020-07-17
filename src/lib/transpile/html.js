@@ -1,24 +1,22 @@
-const is = require('@magic/types')
-const path = require('path')
-const addTrailingSlash = require('../addTrailingSlash')
-const config = require('../../config')
+import path from 'path'
 
-const { WEB_ROOT, BUNDLE_DIR } = config
+import is from '@magic/types'
+
+import addTrailingSlash from '../addTrailingSlash.js'
 
 const transpileOpenRegex = /\s*{\s*{\s*/gim
 const transpileCloseRegex = /\s*}\s*}\s*/gim
 
-const transpileHTML = props => {
+const transpileHTML = async (props, config) => {
+  const { WEB_ROOT, BUNDLE_DIR } = config
+
   if (!is.object(props) || !props.buffer || !props.name) {
     throw new Error('Invalid props in transpileHTML')
   }
 
   const { name, buffer } = props
 
-  const cleanedDir = path
-    .dirname(name)
-    .replace(BUNDLE_DIR, WEB_ROOT)
-    .replace(/\/\//gm, '/')
+  const cleanedDir = path.dirname(name).replace(BUNDLE_DIR, WEB_ROOT).replace(/\/\//gm, '/')
 
   const DIR = addTrailingSlash(cleanedDir)
 
@@ -37,4 +35,4 @@ transpileHTML.regex = {
   close: transpileCloseRegex,
 }
 
-module.exports = transpileHTML
+export default transpileHTML

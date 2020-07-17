@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
-const hasArgv = () =>
+import run from './src/run.js'
+
+const userWantsHelp =
   process.argv.indexOf('-h') > -1 ||
   process.argv.indexOf('--h') > -1 ||
   process.argv.indexOf('-help') > -1 ||
   process.argv.indexOf('--help') > -1 ||
   process.argv.indexOf('help') > -1
 
-if (hasArgv()) {
+if (userWantsHelp) {
   console.log(`
     mspg - magic static page generator
 
@@ -33,5 +35,4 @@ if (hasArgv()) {
   process.exit()
 }
 
-const run = require('./src/run')
 run()

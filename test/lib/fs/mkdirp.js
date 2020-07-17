@@ -1,7 +1,7 @@
-const path = require('path')
-const fs = require('../../../src/lib/fs')
+import path from 'path'
+import fs from '../../../src/lib/fs'
 
-const { is, tryCatch } = require('@magic/test')
+import { is, tryCatch } from '@magic/test'
 
 const testDirRoot = path.join(__dirname, 'mkdirp')
 const testDir = path.join(testDirRoot, 'deep', 'deeper')
@@ -10,7 +10,7 @@ const before = () => async () => {
   await fs.rmrf(testDirRoot)
 }
 
-module.exports = [
+export default [
   { fn: tryCatch(fs.mkdirp), expect: is.error, info: 'mkdirp expects an argument' },
   {
     before,

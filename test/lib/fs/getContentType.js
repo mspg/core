@@ -1,8 +1,8 @@
-const { is } = require('@magic/test')
+import { is } from '@magic/test'
 
-const { getContentType, contentTypes } = require('../../../src/lib/fs')
+import { getContentType, contentTypes } from '../../../src/lib/fs'
 
-module.exports = [
+export default [
   {
     fn: Object.entries(contentTypes).filter(
       ([ext, type]) => type !== getContentType(`file.${ext}`),

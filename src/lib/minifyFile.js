@@ -1,12 +1,13 @@
-const is = require('@magic/types')
-const fs = require('./fs')
+import is from '@magic/types'
+import fs from '@magic/fs'
 
-const conf = require('../config')
-
-const minifyFile = file => {
+const minifyFile = async (file, conf) => {
   const { name, bundle } = file
+
   const type = fs.getFileType(name)
+
   const minifier = conf.MINIFY && conf.MINIFY[type.toUpperCase()]
+
   if (is.function(minifier)) {
     const minified = minifier(bundle, conf)
     return minified
@@ -15,4 +16,4 @@ const minifyFile = file => {
   return file.bundle
 }
 
-module.exports = minifyFile
+export default minifyFile

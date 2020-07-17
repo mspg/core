@@ -1,5 +1,5 @@
-module.exports = html =>
-  html
+export const html = h =>
+  h
     // replace newlines after tags with nothin
     .replace(/\>\n/gim, '>')
     // replace all whitespaces with one space per whitespace group (\n\t\n === ' ').

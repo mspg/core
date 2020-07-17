@@ -1,10 +1,10 @@
-const log = require('@magic/log')
+import log from '@magic/log'
 
-const xc = require('../lib/xc')
-const conf = require('../config')
-const { TASKS, GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
+import xc from '../lib/xc.js'
 
-const publish = async () => {
+export const publish = async conf => {
+  const { TASKS, GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
+
   if (!TASKS.PUBLISH) {
     return
   }
@@ -39,4 +39,4 @@ const publish = async () => {
   log.success('publish finished')
 }
 
-module.exports = publish
+export default publish

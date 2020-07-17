@@ -1,5 +1,5 @@
-const purify = require('purify-css')
-const path = require('path')
+import purify from 'purify-css'
+import path from 'path'
 
 const minify = style =>
   style
@@ -19,7 +19,7 @@ const minify = style =>
     .replace(/,\s/gim, ',')
     .trim()
 
-module.exports = (style, config = { OUT_DIR: process.cwd() }) => {
+export const css = (style, config) => {
   style = style.buffer || style
   if (!config.PURGE_CSS) {
     return minify(style)

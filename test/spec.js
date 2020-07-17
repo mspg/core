@@ -1,8 +1,8 @@
-const { is } = require('@magic/test')
-const config = require('../src/config')
-const localConfig = require('../config')
+import { is } from '@magic/test'
+import config from '../src/config.js'
+import localConfig from '../config.js'
 
-module.exports = [
+export default [
   { fn: () => config, expect: is.object, info: 'calling config returns an object' },
   { fn: () => config.CWD, expect: is.string, info: 'config.CWD is a string' },
   {

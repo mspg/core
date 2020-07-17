@@ -1,12 +1,12 @@
 // git subtree push --prefix example/public origin gh-pages
 
-const log = require('@magic/log')
+import log from '@magic/log'
 
-const xc = require('../lib/xc')
-const conf = require('../config')
-const { TASKS, GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
+import xc from '../lib/xc.js'
 
-const connect = async () => {
+export const connect = async conf => {
+  const { TASKS, GIT_ORIGIN, GIT_BRANCH, OUT_DIR } = conf
+
   if (!TASKS.CONNECT) {
     return
   }
@@ -32,4 +32,4 @@ const connect = async () => {
   log.timeEnd('connect')
 }
 
-module.exports = connect
+export default connect

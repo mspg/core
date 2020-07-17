@@ -1,6 +1,6 @@
-const { is } = require('@magic/test')
+import { is } from '@magic/test'
 
-const fs = require('../../../src/lib/fs/')
+import fs from '../../../src/lib/fs/'
 
 const types = {
   mkdirp: is.fn,
@@ -31,7 +31,7 @@ const types = {
   resolveUrl: is.fn,
 }
 
-module.exports = [
+export default [
   { fn: () => fs, expect: is.object, info: 'fs is an object' },
   {
     fn: () => fs.exists,

@@ -1,18 +1,18 @@
-const is = require('@magic/types')
-const log = require('@magic/log')
-const config = require('../config')
-const transpileHTML = require('./transpile/html')
-const fs = require('./fs/')
+import is from '@magic/types'
+import log from '@magic/log'
+import fs from '@magic/fs'
 
-const { TRANSPILERS } = config
+import transpileHTML from './transpile/html.js'
 
-const transpileFile = async file => {
+const transpileFile = async (file, config) => {
+  const { TRANSPILERS } = config
+
   try {
     let { name, buffer } = file
     const type = fs.getFileType(name)
 
     if (type === 'html') {
-      buffer = transpileHTML(file)
+      buffer = transpileHTML(file, config)
     }
 
     if (!is.empty(TRANSPILERS)) {
@@ -43,4 +43,4 @@ const transpileFile = async file => {
   }
 }
 
-module.exports = transpileFile
+export default transpileFile

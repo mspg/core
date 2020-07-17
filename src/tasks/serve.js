@@ -1,15 +1,14 @@
-const http = require('http')
-const path = require('path')
+import http from 'http'
+import path from 'path'
+import { createReadStream } from 'fs'
 
-const fs = require('../lib/fs')
-const resolveUrl = require('../lib/resolveUrl')
-const log = require('@magic/log')
+import fs from '@magic/fs'
+import resolveUrl from '../lib/resolveUrl.js'
+import log from '@magic/log'
 
-const conf = require('../config')
-
-const handler = async (req, res) => {
+const handler = conf => async (req, res) => {
   try {
-    let filePath = await resolveUrl(req)
+    let filePath = await resolveUrl(req, conf)
 
     const file404 = path.join(conf.OUT_DIR, '404.html')
     if (!filePath && (await fs.exists(file404))) {
@@ -18,7 +17,7 @@ const handler = async (req, res) => {
 
     if (filePath) {
       res.writeHead(200, fs.getContentType(req.url))
-      const stream = fs.createReadStream(filePath)
+      const stream = createReadStream(filePath)
       stream.on('open', () => stream.pipe(res))
       stream.on('error', log.error)
       return
@@ -33,6 +32,6 @@ const handler = async (req, res) => {
   res.end(response)
 }
 
-const serve = async () => http.createServer(handler).listen(3000)
+export const serve = async conf => http.createServer(handler(conf)).listen(3000)
 
-module.exports = serve
+export default serve

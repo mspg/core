@@ -1,6 +1,8 @@
-const path = require('path')
+import path from 'path'
 
-module.exports = {
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
+
+export default {
   // files get loaded from example/src and example/includes
   CWD: path.join(__dirname, 'example'),
   // and published in example/publish

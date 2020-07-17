@@ -1,8 +1,8 @@
-const path = require('path')
+import path from 'path'
 
-const { is } = require('@magic/test')
+import { is } from '@magic/test'
 
-const { getChangedFiles } = require('../../../src/lib/fs')
+import { getChangedFiles } from '../../../src/lib/fs'
 
 const watchedFiles = {
   [path.join(process.cwd(), 'example', 'public', 'index.html')]: { time: 123 },
@@ -18,7 +18,7 @@ const changedFiles = {
 
 const expectedFiles = [path.join(process.cwd(), 'example', 'public', 'index.html')]
 
-module.exports = [
+export default [
   { fn: getChangedFiles({}, {}), expect: is.array, info: 'returns arrays' },
   {
     fn: getChangedFiles(watchedFiles, files),

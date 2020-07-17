@@ -1,9 +1,9 @@
-const path = require('path')
-const fs = require('./fs')
+import path from 'path'
+import fs from '@magic/fs'
 
-const { OUT_DIR } = require('../config')
+const resolveUrl = async (req, conf) => {
+  const { OUT_DIR } = conf
 
-const resolveUrl = async req => {
   const file = path.join(OUT_DIR, req.url)
 
   if (path.resolve(file) === path.resolve(OUT_DIR)) {
@@ -12,6 +12,14 @@ const resolveUrl = async req => {
   }
 
   try {
+    // file exists
+    if (await fs.exists(file)) {
+      const stat = await fs.stat(file)
+      if (stat.isFile()) {
+        return file
+      }
+    }
+
     // file exists as html, /about loads /about.html
     if (await fs.exists(`${file}.html`)) {
       return `${file}.html`
@@ -22,14 +30,6 @@ const resolveUrl = async req => {
     if (await fs.exists(f)) {
       return f
     }
-
-    // file exists
-    if (await fs.exists(file)) {
-      const stat = await fs.stat(file)
-      if (stat.isFile()) {
-        return file
-      }
-    }
   } catch (e) {
     throw e
   }
@@ -37,4 +37,4 @@ const resolveUrl = async req => {
   return false
 }
 
-module.exports = resolveUrl
+export default resolveUrl

@@ -1,10 +1,10 @@
-const path = require('path')
+import path from 'path'
 
-const zopfli = require('node-zopfli-es')
-const log = require('@magic/log')
+import zopfli from 'node-zopfli-es'
+import log from '@magic/log'
 
-const fs = require('../lib/fs')
-const conf = require('../config')
+import fs from '../lib/fs'
+import conf from '../config'
 
 const walk = async dir => {
   try {
@@ -60,13 +60,11 @@ const zipFile = file => {
       blocksplittinglast: false,
       blocksplittingmax: 15,
     }
+
     const zopferl = zopfli.createGzip(options)
     const writeStream = fs.createWriteStream(gzFileName)
 
-    const readStream = fs
-      .createReadStream(file)
-      .pipe(zopferl)
-      .pipe(writeStream)
+    const readStream = fs.createReadStream(file).pipe(zopferl).pipe(writeStream)
 
     readStream.on('error', reject)
     writeStream.on('error', reject)
@@ -86,7 +84,7 @@ const zipFile = file => {
 }
 
 // main task, compresses all files in the public dir
-const zip = async () => {
+export const zip = async () => {
   if (!conf.TASKS.ZIP) {
     return
   }
@@ -97,7 +95,7 @@ const zip = async () => {
   try {
     const files = await walk(conf.OUT_DIR)
 
-    await Promise.all(files.map(zipFile))
+    // await Promise.all(files.map(zipFile))
 
     log.timeEnd('zip')
   } catch (e) {
@@ -105,4 +103,4 @@ const zip = async () => {
   }
 }
 
-module.exports = zip
+export default zip

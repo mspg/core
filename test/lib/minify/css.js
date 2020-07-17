@@ -1,6 +1,6 @@
-const path = require('path')
+import path from 'path'
 
-const minify = require('../../../src/lib/minify/css.js')
+import minify from '../../../src/lib/minify/css.js'
 
 const cssString = `
 .t, 
@@ -14,6 +14,6 @@ const config = {
   OUT_DIR: path.join(process.cwd(), 'example', 'public'),
 }
 
-module.exports = [
+export default [
   { fn: minify(cssString, config), expect: expectedString, info: 'css gets minified' },
 ]

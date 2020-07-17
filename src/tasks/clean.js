@@ -1,10 +1,9 @@
-const fs = require('../lib/fs')
-const log = require('@magic/log')
+import fs from '@magic/fs'
+import log from '@magic/log'
 
-const conf = require('../config')
-const { TASKS, OUT_DIR } = conf
+export const clean = async conf => {
+  const { TASKS, OUT_DIR } = conf
 
-const clean = async () => {
   if (!TASKS.CLEAN) {
     return
   }
@@ -21,4 +20,4 @@ const clean = async () => {
   log.timeEnd('clean')
 }
 
-module.exports = clean
+export default clean

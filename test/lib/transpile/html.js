@@ -1,9 +1,9 @@
-const { is, tryCatch } = require('@magic/test')
-const transpileHTML = require('../../../src/lib/transpile/html')
-const { WEB_ROOT } = require('../../../src/config')
-const addTrailingSlash = require('../../../src/lib/addTrailingSlash')
+import { is, tryCatch } from '@magic/test'
+import transpileHTML from '../../../src/lib/transpile/html'
+import { WEB_ROOT } from '../../../src/config'
+import addTrailingSlash from '../../../src/lib/addTrailingSlash'
 
-module.exports = [
+export default [
   {
     fn: tryCatch(transpileHTML, { buffer: '' }),
     expect: is.error,

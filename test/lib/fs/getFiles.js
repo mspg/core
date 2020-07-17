@@ -1,8 +1,8 @@
-const path = require('path')
+import path from 'path'
 
-const { is, promise } = require('@magic/test')
+import { is, promise } from '@magic/test'
 
-const fs = require('../../../src/lib/fs')
+import fs from '../../../src/lib/fs'
 
 const dir = path.join(process.cwd(), 'example')
 
@@ -32,7 +32,7 @@ const before = async () => {
   }
 }
 
-module.exports = [
+export default [
   {
     fn: async () => await fs.getFiles(dirName),
     before,

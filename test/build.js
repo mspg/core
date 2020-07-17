@@ -1,11 +1,9 @@
 // integration test for the build system.
 // builds the example/ directory and tests the resulting files
+import path from 'path'
 
-const util = require('util')
-const path = require('path')
-
-const xc = require('../src/lib/xc')
-const fs = require('../src/lib/fs')
+import xc from '../src/lib/xc.js'
+import fs from '@magic/fs'
 
 const beforeAll = async () => {
   try {
@@ -15,6 +13,8 @@ const beforeAll = async () => {
     throw e
   }
 }
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
 
 const dir = path.join(__dirname, '..', 'example')
 const publicDir = path.join(dir, 'public')
@@ -57,7 +57,7 @@ const jsFileTest = async () => await fs.readFile(jsSrcFile)
 const jsZipFile = path.join(publicDir, 'main.js.gz')
 const jsZipFileExists = async () => await fs.exists(jsZipFile)
 
-module.exports = {
+export default {
   beforeAll,
   tests: [
     { fn: htmlFileExists, expect: true, info: 'public/index.html exists' },

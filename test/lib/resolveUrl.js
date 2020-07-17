@@ -1,8 +1,8 @@
-const path = require('path')
+import path from 'path'
 
-const fs = require('../../src/lib/fs')
+import fs from '@magic/fs'
 
-const { OUT_DIR } = require('../../config')
+import { OUT_DIR } from '../../config.js'
 
 const resolveUrl = async req => {
   const file = path.join(OUT_DIR, req.url)
@@ -38,4 +38,4 @@ const resolveUrl = async req => {
   return false
 }
 
-module.exports = resolveUrl
+export default resolveUrl

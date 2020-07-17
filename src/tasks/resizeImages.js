@@ -1,22 +1,23 @@
-const { getFiles } = require('../lib/fs/')
-const path = require('path')
-const Jimp = require('jimp')
+import fs from '@magic/fs'
+import Jimp from 'jimp'
 
-const {
-  BUNDLE_DIR,
-  IMAGE_EXTENSIONS,
-  MAX_IMAGE_WIDTH,
-  MAX_IMAGE_HEIGHT,
-  IMAGE_QUALITY,
-  TASKS,
-} = require('../config')
+import conf from '../config.js'
 
-const run = async () => {
+export const resizeImages = async () => {
+  const {
+    BUNDLE_DIR,
+    IMAGE_EXTENSIONS,
+    MAX_IMAGE_WIDTH,
+    MAX_IMAGE_HEIGHT,
+    IMAGE_QUALITY,
+    TASKS,
+  } = await conf()
+
   if (!TASKS.RESIZE_IMAGES) {
     return
   }
 
-  const files = await getFiles(BUNDLE_DIR)
+  const files = await fs.getFiles(BUNDLE_DIR)
   Object.entries(files)
     .filter(([name]) => IMAGE_EXTENSIONS.some(ext => name.endsWith(ext)))
     .map(([name, mtime]) => {
@@ -45,4 +46,4 @@ const run = async () => {
     })
 }
 
-module.exports = run
+export default resizeImages

@@ -1,8 +1,6 @@
-module.exports = {
-  build: require('./build'),
-  publish: require('./publish'),
-  zip: require('./zip'),
-  connect: require('./connect'),
-  clean: require('./clean'),
-  resizeImages: require('./resizeImages'),
-}
+export { build } from './build.js'
+export { publish } from './publish.js'
+// export { zip } from './zip.js'
+export { connect } from './connect.js'
+export { clean } from './clean.js'
+export { resizeImages } from './resizeImages.js'

@@ -1,33 +1,38 @@
-const log = require('@magic/log')
-const is = require('@magic/types')
+import log from '@magic/log'
+import is from '@magic/types'
 
-const serve = require('./serve')
-const fs = require('../lib/fs')
-const maybeWriteFile = require('../lib/maybeWriteFile')
-
-const conf = require('../config')
+import serve from './serve.js'
+import getChangedFiles from '../lib/getChangedFiles.js'
+import getFiles from '../lib/getFiles.js'
+import maybeWriteFile from '../lib/maybeWriteFile.js'
 
 let watchedFiles = {}
 
-const watch = async () => {
-  const files = await fs.getFiles([conf.BUNDLE_DIR, conf.INCLUDES_DIR])
-  const changedFiles = fs.getChangedFiles(watchedFiles, files)
+export const watch = async conf => {
+  const bundleFiles = await getFiles(conf.BUNDLE_DIR)
+  const includesFiles = await getFiles(conf.INCLUDES_DIR)
+
+  const files = { ...bundleFiles, ...includesFiles }
+
+  const changedFiles = await getChangedFiles(watchedFiles, files)
+
   if (!is.empty(changedFiles)) {
     log.info('changed files', changedFiles)
   }
+
   // setting cache after getting the changedFiles
   // leads to the first run building at all times,
   // do not change the order.
   watchedFiles = files
 
-  await Promise.all(changedFiles.map(maybeWriteFile(watchedFiles)))
+  await Promise.all(changedFiles.map(maybeWriteFile(watchedFiles, conf)))
 
   if (conf.WATCH) {
-    setTimeout(watch, 300)
+    setTimeout(() => watch(conf), 300)
   }
 }
 
-const build = async () => {
+export const build = async conf => {
   if (!conf.TASKS.BUILD && !conf.TASKS.SERVE) {
     return
   }
@@ -37,12 +42,12 @@ const build = async () => {
     if (conf.TASKS.BUILD) {
       log('start build')
       log.time('build')
-      await watch()
+      await watch(conf)
     }
 
     if (conf.TASKS.SERVE) {
       log.info('serve')
-      serve()
+      serve(conf)
     }
   } catch (e) {
     throw e
@@ -53,4 +58,4 @@ const build = async () => {
   }
 }
 
-module.exports = build
+export default build

@@ -1,6 +1,6 @@
-const util = require('util')
+import util from 'util'
+import { exec } from 'child_process'
 
-const { exec } = require('child_process')
 const xc = util.promisify(exec)
 
-module.exports = xc
+export default xc

@@ -1,8 +1,8 @@
-const path = require('path')
+import path from 'path'
 
-const is = require('@magic/types')
+import is from '@magic/types'
 
-const fs = require('./fs')
+import fs from '@magic/fs'
 
 const getFiles = async (dirs = [process.cwd()]) => {
   if (is.string(dirs)) {
@@ -34,4 +34,4 @@ const getFiles = async (dirs = [process.cwd()]) => {
   return files
 }
 
-module.exports = getFiles
+export default getFiles
