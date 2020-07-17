@@ -14,11 +14,7 @@ export const watch = async conf => {
 
   const files = { ...bundleFiles, ...includesFiles }
 
-  const changedFiles = await getChangedFiles(watchedFiles, files)
-
-  if (!is.empty(changedFiles)) {
-    log.info('changed files', changedFiles)
-  }
+  const changedFiles = await getChangedFiles(watchedFiles, files, conf)
 
   // setting cache after getting the changedFiles
   // leads to the first run building at all times,
