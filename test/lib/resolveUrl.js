@@ -2,12 +2,14 @@ import path from 'path'
 
 import fs from '@magic/fs'
 
-import { OUT_DIR } from '../../config.js'
+const config = {
+  OUT_DIR: path.join(process.cwd(), 'example', 'public'),
+}
 
-const resolveUrl = async req => {
+const resolveUrl = async (req, config) => {
   const file = path.join(OUT_DIR, req.url)
 
-  if (path.resolve(file) === path.resolve(OUT_DIR)) {
+  if (path.resolve(file) === path.resolve(config.OUT_DIR)) {
     //index.html is the default resolve for /
     return path.join(OUT_DIR, 'index.html')
   }

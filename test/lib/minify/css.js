@@ -1,6 +1,6 @@
 import path from 'path'
 
-import minify from '../../../src/lib/minify/css.js'
+import { css } from '../../../src/lib/minify/css.js'
 
 const cssString = `
 .t, 
@@ -14,6 +14,4 @@ const config = {
   OUT_DIR: path.join(process.cwd(), 'example', 'public'),
 }
 
-export default [
-  { fn: minify(cssString, config), expect: expectedString, info: 'css gets minified' },
-]
+export default [{ fn: css(cssString, config), expect: expectedString, info: 'css gets minified' }]

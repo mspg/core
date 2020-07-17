@@ -1,7 +1,7 @@
 import { is, tryCatch } from '@magic/test'
-import transpileHTML from '../../../src/lib/transpile/html'
-import { WEB_ROOT } from '../../../src/config'
-import addTrailingSlash from '../../../src/lib/addTrailingSlash'
+
+import transpileHTML from '../../../src/lib/transpile/html.js'
+const WEB_ROOT = '/core'
 
 export default [
   {
@@ -15,17 +15,17 @@ export default [
     info: 'errors on invalid html string argument',
   },
   {
-    fn: transpileHTML({ name: '/deep/index.html', buffer: '" { { WEB_ROOT } } "' }),
+    fn: transpileHTML({ name: '/deep/index.html', buffer: '" { { WEB_ROOT } } "' }, { WEB_ROOT }),
     expect: t => t.startsWith('"/') && t.endsWith('/"'),
     info: 'correctly transforms {{WEB_ROOT}}',
   },
   {
-    fn: transpileHTML({ name: '/index.html', buffer: '" { { WEB_ROOT } } "' }),
+    fn: transpileHTML({ name: '/index.html', buffer: '" { { WEB_ROOT } } "' }, { WEB_ROOT }),
     expect: t => t.includes(WEB_ROOT),
     info: 'correctly transforms {{WEB_ROOT}}',
   },
   {
-    fn: transpileHTML({ name: '/testing/dir/file.html', buffer: '" { { DIR } } "' }),
+    fn: transpileHTML({ name: '/testing/dir/file.html', buffer: '" { { DIR } } "' }, { WEB_ROOT }),
     expect: t => t.includes('"/testing/dir/"'),
     info: 'correctly transforms {{DIR}}',
   },
