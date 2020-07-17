@@ -22,7 +22,7 @@ const transpileFile = async (file, config) => {
       
       if (is.function(transpiler)) {
         const bundler = { ...file, config, buffer }
-        const transpiled = await transpiler(bundler)
+        const transpiled = await transpiler(bundler, config)
         if (is.error(transpiled)) {
           throw transpiled
         } else if (is.string(transpiled)) {
