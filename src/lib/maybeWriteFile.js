@@ -9,11 +9,16 @@ const maybeWriteFile = (watchedFiles, conf) => async ([name]) => {
   try {
     const { BUNDLE_DIR, IGNORE_EXTENSIONS } = conf
 
-    const timeIndex = `minify: ${name.replace(BUNDLE_DIR, '')}`
+    // const timeIndex = `minify: ${name.replace(BUNDLE_DIR, '')}`
 
-    log.time(timeIndex)
+    // log.time(timeIndex)
 
-    const { buffer, out } = await getFileContent({ name }, conf)
+    const result = await getFileContent({ name }, conf)
+    if (!result) {
+      return
+    }
+
+    const { buffer, out } = result
 
     if (IGNORE_EXTENSIONS.some(ext => name.endsWith(ext))) {
       log.info('File ignored by extension', name)
@@ -29,7 +34,7 @@ const maybeWriteFile = (watchedFiles, conf) => async ([name]) => {
 
       watchedFiles[name].content = minified
 
-      log.timeEnd(timeIndex)
+      // log.timeEnd(timeIndex)
 
       return minified
     }

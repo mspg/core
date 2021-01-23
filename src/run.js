@@ -27,3 +27,12 @@ const run = async () => {
 }
 
 export default run
+
+process.on('uncaughtException', (e) => {
+  console.log('uncaughtException', e);
+  process.exit()
+});
+
+process.on('unhandledRejection', (e) => {
+  console.log('unhandledRejection', e, e.stack)
+})

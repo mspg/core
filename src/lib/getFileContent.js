@@ -1,4 +1,5 @@
 import fs from '@magic/fs'
+import path from 'path'
 
 const getFileContent = async (file, conf) => {
   const { name } = file
@@ -8,6 +9,10 @@ const getFileContent = async (file, conf) => {
   let textFmt
   if (contentType.startsWith('text/') || contentType === 'application/javascript') {
     textFmt = 'utf8'
+  }
+
+  if (!path.extname(name)) {
+    return
   }
 
   const buffer = await fs.readFile(name, textFmt)
