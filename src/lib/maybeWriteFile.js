@@ -1,11 +1,16 @@
 import log from '@magic/log'
+import is from '@magic/types'
 
 import transpileFile from './transpileFile.js'
 import minifyFile from './minifyFile.js'
 import getFileContent from './getFileContent.js'
 import write from './write.js'
 
-const maybeWriteFile = (watchedFiles, conf) => async ([name]) => {
+const maybeWriteFile = (watchedFiles, conf) => async name => {
+  if (is.array(name)) {
+    name = name[0]
+  }
+
   try {
     const { BUNDLE_DIR, IGNORE_EXTENSIONS } = conf
 

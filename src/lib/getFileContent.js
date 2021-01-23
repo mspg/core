@@ -11,7 +11,9 @@ const getFileContent = async (file, conf) => {
     textFmt = 'utf8'
   }
 
-  if (!path.extname(name)) {
+  const stat = await fs.stat(name)
+
+  if (stat.isDirectory()) {
     return
   }
 
