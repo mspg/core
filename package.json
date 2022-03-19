@@ -24,15 +24,15 @@
     }
   ],
   "dependencies": {
-    "@magic/deep": "0.1.5",
-    "@magic/fs": "0.0.11",
-    "@magic/log": "0.1.8",
-    "@magic/types": "0.1.15",
-    "sharp": "0.27.2"
+    "@magic/deep": "0.1.10",
+    "@magic/fs": "0.0.22",
+    "@magic/log": "0.1.13",
+    "@magic/types": "0.1.18",
+    "sharp": "0.30.3"
   },
   "devDependencies": {
-    "@magic/format": "0.0.22",
-    "@magic/test": "0.1.65"
+    "@magic/format": "0.0.38",
+    "@magic/test": "0.2.7"
   },
   "files": [
     "src",
