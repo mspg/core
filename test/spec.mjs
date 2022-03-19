@@ -3,7 +3,7 @@ import config from '../src/config.js'
 import localConfig from '../config.js'
 
 export default [
-  { fn: config(), expect: is.object, info: 'calling config returns an object' },
+  { fn: () => config(), expect: is.object, info: 'calling config returns an object' },
   {
     fn: async () => {
       const conf = await config()
