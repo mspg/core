@@ -1,5 +1,6 @@
 import fs from '@magic/fs'
 import path from 'path'
+import { pathToFileURL } from 'url'
 
 import * as minify from './lib/minify/index.js'
 
@@ -13,7 +14,7 @@ export const getConfig = async () => {
   try {
     const exists = await fs.exists(configPath)
     if (exists) {
-      const { default: conf } = await import(configPath)
+      const { default: conf } = await import(pathToFileURL(configPath))
       config = { ...conf }
     }
   } catch (e) {
